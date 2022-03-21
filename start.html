@@ -1,25 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body, canvas {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-        #tilesheetCanvas{
-
-            position: absolute;
-            left: 0rem;
-            top: 0rem;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body onload="init()">
     <canvas id="canvas-id"></canvas>
     <canvas id="tilesheetCanvas" style="display: none;"></canvas>
     <script src="additionalFunctions.js"></script>
     <script src="assets.js"></script>
+    <script src="map.js"></script>
     <script src="game.js"></script>
     <script>
         if(endlessCanvas == undefined){

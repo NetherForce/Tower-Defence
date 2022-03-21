@@ -1,10 +1,7 @@
 let tilesheet = new Image();
 tilesheet.src = "./assets/Tilesheet/towerDefense_tilesheet@2.png";
 tilesheet.addEventListener("load", function() {
-    console.log("loaded");
     loadTiles("tilesheetCanvas", tilesheet, originalTileSize, determineNewSize(20, 20), sheetLenghtX, sheetLenghtY);
-
-    console.log(determineNewSize(20, 20));
 });
 
 let originalTileSize = 128; //in pixels
@@ -12,6 +9,17 @@ let currSize;
 let cellStride;
 let sheetLenghtX = 29, sheetLenghtY = 13;
 let distBetweenCanvasTiles = 2; //in pixels
+
+function idToIndex(theId){
+    return {
+        x: theId-Math.floor(theId/sheetLenghtX),
+        y: Math.floor(theId/sheetLenghtX)
+    }
+}
+
+function indexToId(x, y){
+    return (y*sheetLenghtX + x);
+}
 
 function determineNewSize(cellCountX, cellCountY){
     let windowWidth = window.innerWidth;
@@ -42,7 +50,6 @@ function loadTiles(canvasId, tilesheet, originalSize, newSize, sheetLenghtX, she
             theContext.drawImage(tilesheet, sheetX, sheetY, originalSize, originalSize, newCanvasX, newCanvasY, newSize, newSize);
         }
     }
-    console.log(tilesheet);
 }
 
 function drawTile(context, indexX, indexY, newX, newY, angle){

@@ -1,0 +1,11 @@
+body, canvas {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+#tilesheetCanvas{
+
+    position: absolute;
+    left: 0rem;
+    top: 0rem;
+}
