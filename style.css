@@ -3,9 +3,33 @@ body, canvas {
     padding: 0;
     overflow: hidden;
 }
-#tilesheetCanvas{
 
+#tilesheetCanvas{
     position: absolute;
     left: 0rem;
     top: 0rem;
+}
+
+#backgroundCanvas{
+    position: absolute;
+    left: 0rem;
+    top: 0rem;
+    background-color: lightblue;
+}
+
+#mapEditToolHolder{
+    position: absolute;
+    bottom: 0rem;
+    left: 0rem;
+    width: 100%;
+    height: 7rem;
+    overflow-x: auto;
+}
+
+.mapEditButton{
+    width:32px;
+    height:32px;
+    background-image: url('assets/Tilesheet/towerDefense_tilesheet@2.png');
+    background-position: -0px -0px;
+    background-size: 736px 416px;
 }

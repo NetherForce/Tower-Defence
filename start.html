@@ -4,10 +4,15 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body onload="init()">
+    <button id="buttonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
+    <div id="mapEditToolHolder">
+    </div>
+    <canvas id="backgroundCanvas"></canvas>
     <canvas id="canvas-id"></canvas>
     <canvas id="tilesheetCanvas" style="display: none;"></canvas>
     <script src="additionalFunctions.js"></script>
     <script src="assets.js"></script>
+    <script src="htmlFunction.js"></script>
     <script src="map.js"></script>
     <script src="game.js"></script>
     <script>
