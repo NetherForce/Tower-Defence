@@ -7,14 +7,18 @@
     <button id="buttonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
     <div id="mapEditToolHolder">
     </div>
-    <canvas id="backgroundCanvas"></canvas>
     <canvas id="canvas-id"></canvas>
     <canvas id="tilesheetCanvas" style="display: none;"></canvas>
+
+    <script src="globalStuff.js"></script>
+    <script src="maps.js"></script>
+    <script src="tiles.js"></script>
     <script src="additionalFunctions.js"></script>
     <script src="assets.js"></script>
     <script src="htmlFunction.js"></script>
     <script src="map.js"></script>
     <script src="game.js"></script>
+
     <script>
         if(endlessCanvas == undefined){
             var endlessCanvas = true;
@@ -65,7 +69,7 @@
             };
 
         function redraw() {
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            // context.clearRect(0, 0, canvas.width, canvas.height);
             /*context.globalAlpha = 1;
 
             // draw grid
@@ -117,14 +121,14 @@
                     var touchobj = e.changedTouches[0];
                     mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
                     mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
-                    mousedown();
+                    // mousedown();
                 });
 
                 window.addEventListener("touchend", function (e) {
                     var touchobj = e.changedTouches[0];
                     mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
                     mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
-                    mouseup();
+                    // mouseup();
                 });
                 window.addEventListener("touchmove", function (e) {
                     var touchobj = e.changedTouches[0];

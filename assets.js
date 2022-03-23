@@ -1,11 +1,10 @@
 let tilesheet = new Image();
 tilesheet.src = "./assets/Tilesheet/towerDefense_tilesheet@2.png";
 tilesheet.addEventListener("load", function() {
-    loadTiles("tilesheetCanvas", tilesheet, originalTileSize, determineNewSize(20, 20), sheetLenghtX, sheetLenghtY);
+    loadTiles("tilesheetCanvas", tilesheet, originalTileSize, 20, 20, sheetLenghtX, sheetLenghtY);
 });
 
 let originalTileSize = 128; //in pixels
-let currSize;
 let cellStride;
 let sheetLenghtX = 22, sheetLenghtY = 13;
 let distBetweenCanvasTiles = 2; //in pixels
@@ -27,26 +26,26 @@ function determineNewSize(cellCountX, cellCountY){
     let windowHeight = window.innerHeight;
 
     let cellSize = Math.min(windowWidth/cellCountX, windowHeight/cellCountY);
-    cellSize = Math.floor(cssPixelToRealPixel(cellSize));
+    // cellSize = Math.floor(cssPixelToRealPixel(cellSize));
+    cellSize = Math.floor(cellSize);
     return Math.min(originalTileSize, cellSize);
 }
 
-function loadTiles(canvasId, tilesheet, originalSize, newSize, sheetLenghtX, sheetLenghtY){
-    currSize = newSize;
-    cellStride = currSize+distBetweenCanvasTiles;
+function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, sheetLenghtX, sheetLenghtY){
+    let newSize = determineNewSize(numCellsX, numCellsY)
+    tileSize = newSize;
+    cellStride = tileSize+distBetweenCanvasTiles;
     
     let theCanvas = document.getElementById(canvasId);
     let theContext = theCanvas.getContext("2d");
     theCanvas.width = sheetLenghtX*cellStride;
     theCanvas.height = sheetLenghtY*cellStride;
-    
-    let theBackgroundCanvas = document.getElementById("backgroundCanvas");
-    let theBackgroundContext = theBackgroundCanvas.getContext("2d");
-    theBackgroundCanvas.width = sheetLenghtX*cellStride;
-    theBackgroundCanvas.height = sheetLenghtY*cellStride;
+
+    canvas.width = numCellsX*cellStride;
+    canvas.height = numCellsY*cellStride;
 
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
-    theBackgroundContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
+    context.clearRect(0, 0, theCanvas.width, theCanvas.height);
 
     document.getElementById("mapEditToolHolder").innerHTML = "";
     for(let j = 0; j < sheetLenghtY; j++){
@@ -64,20 +63,19 @@ function loadTiles(canvasId, tilesheet, originalSize, newSize, sheetLenghtX, she
     tileCanvas = theCanvas;
 }
 
-function drawTile(context, indexX, indexY, newX, newY, angle){
+function drawTile(indexX, indexY, newX, newY, angle){
     let canvasX = indexX*cellStride;
     let canvasY = indexY*cellStride;
 
-    context.drawImage(tileCanvas, canvasX, canvasY, currSize, currSize, newX, newY, currSize, currSize);
+    context.drawImage(tileCanvas, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
 }
 
-function redrawTile(context, indexX, indexY, newX, newY, angle){
+function redrawTile(indexX, indexY, newX, newY, angle){
     let canvasX = indexX*cellStride;
     let canvasY = indexY*cellStride;
-    
-    console.log(newY, newY, currSize, currSize);
 
-    context.clearRect(newY, newY, currSize, currSize);
+    console.log("aaaaaa", context, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
+    context.clearRect(newX, newY, tileSize, tileSize);
 
-    context.drawImage(tileCanvas, canvasX, canvasY, currSize, currSize, newX, newY, currSize, currSize);
+    context.drawImage(tileCanvas, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
 }

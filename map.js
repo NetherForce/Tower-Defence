@@ -1,47 +1,17 @@
 class Tile{
-    constructor(type_, indexX_, indexY_, size_){
+    constructor(type_, indexX_, indexY_){
         this.type = type_;
         this.indexX = indexX_;
         this.indexY = indexY_;
-        this.size = size_;
         this.canBeBuildOn = true;
-    }
-    returnX(offsetX){
-        return (this.indexX * this.size + offsetX);
-    }
-    returnY(offsetY){
-        return (this.indexY * this.size + offsetY);
-    }
-    draw(context, offsetX, offsetY){
-        try{
-            let canvasPosition = idToIndex(this.type);
-            drawTile(context, canvasPosition.x, canvasPosition.y, this.returnX(offsetX), this.returnY(offsetY), 0);
-        }catch(error){
-            console.error(error);
-        }
-    }
-    redraw(context, offsetX, offsetY){
-        try{
-            let canvasPosition = idToIndex(this.type);
-            redrawTile(context, canvasPosition.x, canvasPosition.y, this.returnX(offsetX), this.returnY(offsetY), 0);
-        }catch(error){
-            console.error(error);
-        }
     }
 }
 
 class Map{
-    constructor(sizeX_, sizeY_, tileSize_){
+    constructor(sizeX_, sizeY_){
         this.sizeX = sizeX_;
         this.sizeY = sizeY_;
-        this.tileSize = tileSize_;
-        this.tiles=[];
-        for(let i = 0; i < this.sizeX; i++){
-            this.tiles[i] = [];
-            for(let j = 0; j < this.sizeY; j++){
-                this.tiles[i][j] = new Tile(119, i, j, this.tileSize);
-            }
-        }
+        this.tiles=mapBackgroundTiles[0];
         this.overlapTiles=[];
         this.offsetX = 0;
         this.offsetY = 0;
@@ -49,29 +19,29 @@ class Map{
     update(){
         //update all the overlapping assets
     }
-    drawBackgroundTiles(backgroundContext){
-        backgroundContext.clearRect(0, 0, backgroundContext.width, backgroundContext.height);
+    drawBackgroundTiles(){
+        context.clearRect(0, 0, context.width, context.height);
 
         for(let i = 0; i < this.sizeX; i++){
             for(let j = 0; j < this.sizeY; j++){
-                this.tiles[i][j].draw(backgroundContext, this.offsetX, this.offsetY);
+                tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
             }
         }
     }
-    drawCanvasOutline(context){
+    drawCanvasOutline(){
         for(let i = 0; i < this.sizeX+1; i++){
             context.strokeStyle = "black";
             context.beginPath();
-            context.moveTo(0, i*this.tileSize);
-            context.lineTo(this.sizeY*this.tileSize, i*this.tileSize);
+            context.moveTo(0, i*tileSize);
+            context.lineTo(this.sizeY*tileSize, i*tileSize);
             context.stroke();
         }
         
         for(let i = 0; i < this.sizeY+1; i++){
             context.strokeStyle = "black";
             context.beginPath();
-            context.moveTo(i*this.tileSize, 0);
-            context.lineTo(i*this.tileSize, this.sizeX*this.tileSize);
+            context.moveTo(i*tileSize, 0);
+            context.lineTo(i*tileSize, this.sizeX*tileSize);
             context.stroke();
         }
     }
