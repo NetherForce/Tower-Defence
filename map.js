@@ -13,6 +13,12 @@ class Map{
         this.sizeY = sizeY_;
         this.tiles=mapBackgroundTiles[0];
         this.overlapTiles=[];
+        for(let i = 0; i < this.sizeX; i++){
+            this.overlapTiles[i] = [];
+            for(let j = 0; j < this.sizeY; j++){
+                this.overlapTiles[i][j] = new Tile(-1, i, j);
+            }
+        }
         this.offsetX = 0;
         this.offsetY = 0;
     }
@@ -25,6 +31,7 @@ class Map{
         for(let i = 0; i < this.sizeX; i++){
             for(let j = 0; j < this.sizeY; j++){
                 tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
+                tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
             }
         }
     }

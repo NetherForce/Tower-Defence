@@ -22,7 +22,7 @@ var tileFunctions = new (function (){
     function redraw(type, indexX, indexY, offsetX, offsetY){
         try{
             let canvasPosition = idToIndex(type);
-            redrawTile(canvasPosition.x, canvasPosition.y, returnX(offsetX), returnY(offsetY), 0);
+            redrawTile(canvasPosition.x, canvasPosition.y, returnX(indexX, offsetX), returnY(indexY, offsetY), 0);
         }catch(error){
             console.error(error);
         }

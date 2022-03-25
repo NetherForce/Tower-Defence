@@ -74,7 +74,6 @@ function redrawTile(indexX, indexY, newX, newY, angle){
     let canvasX = indexX*cellStride;
     let canvasY = indexY*cellStride;
 
-    console.log("aaaaaa", context, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
     context.clearRect(newX, newY, tileSize, tileSize);
 
     context.drawImage(tileCanvas, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
