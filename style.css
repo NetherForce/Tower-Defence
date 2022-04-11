@@ -4,6 +4,10 @@ body, canvas {
     overflow: hidden;
 }
 
+body{
+    position: relative;
+}
+
 #tilesheetCanvas{
     position: absolute;
     left: 0rem;
@@ -25,4 +29,18 @@ body, canvas {
     background-image: url('assets/Tilesheet/towerDefense_tilesheet@2.png');
     background-position: -0px -0px;
     background-size: 736px 416px;
+}
+
+#canvas-id{
+    position: absolute;
+    left: 0rem;
+    top: 0rem;
+    z-index: 1;
+}
+
+#updatable-canvas{
+    position: absolute;
+    left: 0rem;
+    top: 0rem;
+    z-index: 5;
 }

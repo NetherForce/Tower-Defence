@@ -10,6 +10,10 @@ let sheetLenghtX = 22, sheetLenghtY = 13;
 let distBetweenCanvasTiles = 2; //in pixels
 let tileCanvas;
 
+let floorTiles = {
+    89: true
+};
+
 function idToIndex(theId){
     return {
         x: theId-Math.floor(theId/sheetLenghtX)*sheetLenghtX,
@@ -44,8 +48,12 @@ function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, shee
     canvas.width = numCellsX*cellStride;
     canvas.height = numCellsY*cellStride;
 
+    updatableCanvas.width = numCellsX*cellStride;
+    updatableCanvas.height = numCellsY*cellStride;
+
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
     context.clearRect(0, 0, theCanvas.width, theCanvas.height);
+    updatableContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
 
     document.getElementById("mapEditToolHolder").innerHTML = "";
     for(let j = 0; j < sheetLenghtY; j++){
@@ -77,4 +85,18 @@ function redrawTile(indexX, indexY, newX, newY, angle){
     context.clearRect(newX, newY, tileSize, tileSize);
 
     context.drawImage(tileCanvas, canvasX, canvasY, tileSize, tileSize, newX, newY, tileSize, tileSize);
+}
+
+function drawRotadedImage(index, newX, newY, angle){
+    let canvasX = (index%sheetLenghtX)*cellStride;
+    let canvasY = Math.floor(index/sheetLenghtX)*cellStride;
+
+    updatableContext.save();
+    updatableContext.translate(newX, newY);
+
+    updatableContext.rotate(angle);
+
+    updatableContext.drawImage(tileCanvas, canvasX, canvasY, tileSize, tileSize, -tileSize/2, -tileSize/2, tileSize, tileSize);
+
+    updatableContext.restore();
 }
