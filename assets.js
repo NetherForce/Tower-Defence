@@ -6,12 +6,12 @@ tilesheet.addEventListener("load", function() {
 
 let originalTileSize = 128; //in pixels
 let cellStride;
-let sheetLenghtX = 22, sheetLenghtY = 13;
+let sheetLenghtX = 23, sheetLenghtY = 13;
 let distBetweenCanvasTiles = 2; //in pixels
 let tileCanvas;
 
 let floorTiles = {
-    89: true
+    93: true
 };
 
 function idToIndex(theId){

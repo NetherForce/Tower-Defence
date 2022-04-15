@@ -1,10 +1,10 @@
 endelessCanvas = true;
 let map;
 let isInEditiongMode = false;
-let currEditIndex = 119;
+let currEditIndex = 130;
 let time = 0;
 let currEnemy;
-let currTurrType = 0;
+let currTurrType = 1;
 let gameStoped = false;
 
 window.addEventListener("load", function() {
@@ -19,13 +19,18 @@ function setMap(aMap){
     }
     map.drawBackgroundTiles();
     map.calculatePath();
+
+    // for(let i=0; i < map.sizeX; i++){
+    //     for(let j = 0; j < map.sizeY; j++){
+    //         map.placeTurret(i, j, currTurrType);
+    //     }
+    // }
 }
 
 function update() {
     if(gameStoped) return;
     time++;
     if(map){
-        updatableContext.clearRect(0, 0, updatableCanvas.width, updatableCanvas.height);
         for(let i in map.enemies){
             let theEnemy = map.enemies[i];
             theEnemy.move();
@@ -51,8 +56,7 @@ function update() {
             }
         }else{
             if(time%currEnemy.timeToSpawn == 0){
-                currEnemy.spawn();
-                map.enemies.push(currEnemy);
+                map.addEnemy(-1, currEnemy);
                 currEnemy = undefined;
                 if(map.enemiesToSpawn[0] != undefined){
                     currEnemy = new Enemy(map.enemies.length, map.path);
@@ -69,6 +73,7 @@ function update() {
 
 function draw() {
     if(map){
+        updatableContext.clearRect(0, 0, updatableCanvas.width, updatableCanvas.height);
         for(let i in map.enemies){
             let theEnemy = map.enemies[i];
             theEnemy.drawSelf();
@@ -95,12 +100,12 @@ function draw() {
                     updatableContext.fillStyle = "red";
                 }
                 updatableContext.beginPath();
-                updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, turretTypes[currTurrType].reach, 0, 2 * Math.PI, false);
+                // updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, currTurr.reach, 0, 2 * Math.PI, false);
                 updatableContext.stroke();
                 updatableContext.fillRect(indexX*tileSize, indexY*tileSize, tileSize, tileSize);
                 updatableContext.globalAlpha = 1;
                 
-                drawRotadedImage(turretTypes[currTurrType].imageIndex, indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, 0);
+                drawRotadedImage(turretDisplayIndex[currTurrType], indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, degreesToRadian(90));
             }
         }
     }
@@ -114,10 +119,22 @@ function mouseup(info) {
     console.log(info.button);
     let indexX = Math.floor(mouseX/tileSize);
     let indexY = Math.floor(mouseY/tileSize);
+
+    if(indexX < map.sizeX && indexY < map.sizeY) console.log(map.tiles[indexX][indexY], map.overlapTiles[indexX][indexY]);    
+    // //for testing only
+    // indexX = Math.floor(mouseX/cellStride);
+    // indexY = Math.floor(mouseY/cellStride);
+    // console.log(indexX, indexY);
+    // console.log("==============================");
+    // console.log("old index: " + (indexY*22+indexX));
+    // console.log("new index: " + (indexY*23+indexX));
+    // console.log("------------------------------");
+    // return;
+
     if(isInEditiongMode){
         if(indexX < map.sizeX && indexY < map.sizeY){
             if(info.button == 0){
-                console.log(indexX, indexY, currEditIndex);
+                // console.log(indexX, indexY, currEditIndex);
                 map.tiles[indexX][indexY].type = currEditIndex;
                 tileFunctions.redraw(map.tiles[indexX][indexY].type, indexX, indexY, map.offsetX, map.offsetY);
                 if(map.overlapTiles[indexX][indexY].type != -1) tileFunctions.draw(map.overlapTiles[indexX][indexY].type, indexX, indexY, map.offsetX, map.offsetY);
@@ -150,7 +167,7 @@ function mouseup(info) {
             }
         }
     }else{
-        console.log(indexX, indexY, indexY*sheetLenghtX+indexX);
+        // console.log(indexX, indexY, indexY*sheetLenghtX+indexX);
         map.placeTurret(indexX, indexY, currTurrType);
     }
 };

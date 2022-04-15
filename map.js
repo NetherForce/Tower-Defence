@@ -20,10 +20,11 @@ class Map{
         this.endIndexX;
         this.endIndexY;
         this.path;
-        this.enemies = [];
-        this.enemiesToSpawn = [[0, 100]]; //keeps track of the enemy types it needs to spawn and the number of them
-        this.turrets = [];
-        this.bullets = [];
+        this.enemies = {};
+        this.enemiesToSpawn = [[3, 10000]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.turrets = {};
+        this.bullets = {};
+        this.idCount = 0;
         this.globalHealth = 100;
     }
     drawBackgroundTiles(){
@@ -94,25 +95,57 @@ class Map{
     calculatePath(){
         this.path = this.calculateNextPathIndex(this.startIndexX, this.startIndexY, -1, -1);
     }
+    addEnemy(type, enemy=null){
+        if(enemy != null){
+            currEnemy.spawn();
+            currEnemy.id = this.idCount;
+            this.idCount++;
+            this.enemies[currEnemy.id] = currEnemy;
+        }else{
+            let newEnemy = new Enemy(this.idCount, this.path);
+            newEnemy.setByType(type);
+            this.idCount++;
+            this.enemies[newEnemy.id] = newEnemy;
+        }
+    }
     removeEnemy(enemyId, reachedEnd){
         if(reachedEnd){
             this.globalHealth -= this.enemies[enemyId].dmg;
         }
-        this.enemies[this.enemies.length-1].id = enemyId;
-        this.enemies[enemyId] = this.enemies[this.enemies.length-1];
-        this.enemies.pop();
+        delete this.enemies[enemyId];
     }
     placeTurret(indexX, indexY, type){
         if(this.overlapTiles[indexX][indexY].type == -1 && tilesYouCanBuildOn[this.tiles[indexX][indexY].type]){
-            let turret = new Turret(this.turrets.length, indexX, indexY);
-            turret.setByType(type);
-            this.turrets.push(turret);
+            let turret = new turretTypes[type](this.idCount, indexX, indexY, type);
+            this.idCount++;
+            this.turrets[turret.id] = turret;
             this.overlapTiles[indexX][indexY].type = type;
         }   
     }
+    addBullet(turret){
+        let newBullet = new bulletTypes[turret.bulletType](this.idCount, turret.id);
+        this.idCount++;
+
+        newBullet.setDirectiron(turret.angle);
+
+        newBullet.centerX = turret.centerX;
+        newBullet.centerY = turret.centerY;
+
+        this.bullets[newBullet.id] = newBullet;
+    }
+    addRocket(turret){
+        let newBullet = new bulletTypes[turret.bulletType](this.idCount, turret.id);
+        this.idCount++;
+
+        newBullet.setDirectiron(turret.angle);
+
+        newBullet.updateAngle(turret.angle, turret.centerX, turret.centerY);
+
+        this.bullets[newBullet.id] = newBullet;
+
+        return newBullet.id;
+    }
     removeBullet(bulletId){
-        this.bullets[this.bullets.length-1].id = bulletId;
-        this.bullets[bulletId] = this.bullets[this.bullets.length-1];
-        this.bullets.pop();
+        delete this.bullets[bulletId];
     }
 }

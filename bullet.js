@@ -1,76 +1,16 @@
-let bulletTypes = {
-    0: {
-        imageIndex: 261,
-        speed: 10,
-        dmg: 10
-    },
-    1: {
-        imageIndex: 262,
-        speed: 30,
-        dmg: 10
-    },
-    2: {
-        imageIndex: 263,
-        speed: 30,
-        dmg: 10
-    },
-    3: {
-        imageIndex: 264,
-        speed: 30,
-        dmg: 10
-    },
-    4: {
-        imageIndex: 283,
-        speed: 30,
-        dmg: 10
-    },
-    5: {
-        imageIndex: 284,
-        speed: 30,
-        dmg: 10
-    },
-    6: {
-        imageIndex: 285,
-        speed: 30,
-        dmg: 10
-    },
-    7: {
-        imageIndex: 286,
-        speed: 30,
-        dmg: 10
-    },
-    8: {
-        imageIndex: 241,
-        speed: 30,
-        dmg: 10
-    },
-    9: {
-        imageIndex: 242,
-        speed: 30,
-        dmg: 10
-    }
-}
-
 class Bullet{
     constructor(id_, parentId_){
         this.id = id_;
-        this.centerX;
-        this.centerY;
-        this.speed;
-        this.directionX;
-        this.directionY;
-        this.angle;
+        this.centerX = 0;
+        this.centerY = 0;
+        this.speed = 10;
+        this.directionX = 0;
+        this.directionY = 0;
+        this.angle = 0;
         this.dmg;
         this.target = null;
         this.imageIndex = 0;
         this.parentId = parentId_;
-    }
-    setByType(type){
-        this.type = type;
-        type = bulletTypes[type]
-        for(let key in type){
-            this[key] = type[key];
-        }
     }
     setDirectiron(angle){
         this.angle = angle;
@@ -91,7 +31,7 @@ class Bullet{
             let direction = normalizeVector(this.target.centerX-this.centerX, this.target.centerY-this.centerY);
             this.directionX = direction.x;
             this.directionY = direction.y;
-            this.angle = degreesToRadian(90) + Math.atan2(this.target.centerY - this.centerY, this.target.centerX - this.centerX);
+            this.angle = Math.atan2(this.target.centerY - this.centerY, this.target.centerX - this.centerX);
         }else{
             for(let i in map.enemies){
                 let enemy = map.enemies[i];
@@ -108,6 +48,188 @@ class Bullet{
         }
     }
     drawSelf(){
-        drawRotadedImage(this.imageIndex, this.centerX, this.centerY, this.angle);
+        drawRotadedImage(this.imageIndex, this.centerX, this.centerY, this.angle + degreesToRadian(90));
     }
+}
+
+class Bullet1 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 272;
+        this.dmg = 10;
+    }
+}
+
+class Bullet2 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 273;
+        this.dmg = 15;
+    }
+}
+
+class Bullet3 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 274;
+        this.dmg = 20;
+    }
+}
+
+class Bullet4 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 275;
+        this.dmg = 25;
+    }
+}
+
+class Bullet5 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 295;
+        this.dmg = 20;
+    }
+}
+
+class Bullet6 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 296;
+        this.dmg = 25;
+    }
+}
+
+class Bullet7 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 297;
+        this.speed = 10;
+        this.dmg = 30;
+    }
+}
+
+class Bullet8 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 298;
+        this.speed = 10;
+        this.dmg = 35;
+    }
+}
+
+class Rocket1 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 251;
+        this.speed = 10;
+        this.dmg = 100;
+
+        this.isFired = false;
+    }
+    updateAngle(newAngle, turretX, turretY){
+        this.setDirectiron(newAngle);
+
+        //calculate new position
+        let newX, newY;
+
+        this.centerX = turretX;
+        this.centerY = turretY;
+    }
+    update(){
+        if(!this.isFired) return;
+
+        this.centerX += this.directionX*this.speed;
+        this.centerY += this.directionY*this.speed;
+    
+        if(!areColliding(this.centerX-tileSize/2, this.centerY-tileSize/2, tileSize, tileSize, 0, 0, map.sizeX*tileSize, map.sizeY*tileSize)){
+            map.removeBullet(this.id);
+            return;
+        }
+
+        if(this.target != null){
+            let direction = normalizeVector(this.target.centerX-this.centerX, this.target.centerY-this.centerY);
+            this.directionX = direction.x;
+            this.directionY = direction.y;
+            this.angle = Math.atan2(this.target.centerY - this.centerY, this.target.centerX - this.centerX);
+        }else{
+            for(let i in map.enemies){
+                let enemy = map.enemies[i];
+                if(getDistance(this.centerX, this.centerY, enemy.centerX, enemy.centerY) < tileSize/2){
+                    enemy.health -= this.dmg;
+                    map.removeBullet(this.id);
+                    if(enemy.health <= 0){
+                        enemy.isDead = true;
+                        map.removeEnemy(enemy.id, false);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
+class Rocket2 extends Bullet{
+    constructor(id_, parentId_){
+        super(id_, parentId_);
+        this.imageIndex = 252;
+        this.speed = 10;
+        this.dmg = 120;
+
+        this.isFired = false;
+    }
+    updateAngle(newAngle, turretX, turretY){
+        this.setDirectiron(newAngle);
+
+        //calculate new position
+        let newX, newY;
+
+        // this.centerX = newX;
+        // this.centerY = newY;
+    }
+    update(){
+        if(!this.isFired) return;
+
+        this.centerX += this.directionX*this.speed;
+        this.centerY += this.directionY*this.speed;
+    
+        if(!areColliding(this.centerX-tileSize/2, this.centerY-tileSize/2, tileSize, tileSize, 0, 0, map.sizeX*tileSize, map.sizeY*tileSize)){
+            map.removeBullet(this.id);
+            return;
+        }
+
+        if(this.target != null){
+            let direction = normalizeVector(this.target.centerX-this.centerX, this.target.centerY-this.centerY);
+            this.directionX = direction.x;
+            this.directionY = direction.y;
+            this.angle = Math.atan2(this.target.centerY - this.centerY, this.target.centerX - this.centerX);
+        }else{
+            for(let i in map.enemies){
+                let enemy = map.enemies[i];
+                if(getDistance(this.centerX, this.centerY, enemy.centerX, enemy.centerY) < tileSize/2){
+                    enemy.health -= this.dmg;
+                    map.removeBullet(this.id);
+                    if(enemy.health <= 0){
+                        enemy.isDead = true;
+                        map.removeEnemy(enemy.id, false);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//initialize bulletTypes variable
+let bulletTypes = {
+    0: Bullet1,
+    1: Bullet2,
+    2: Bullet3,
+    3: Bullet4,
+    4: Bullet5,
+    5: Bullet6,
+    6: Bullet7,
+    7: Bullet8,
+    8: Rocket1,
+    9: Rocket1,
 }

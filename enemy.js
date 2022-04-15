@@ -3,7 +3,7 @@ let enemyTypes = {
         maxHealth: 20,
         health: 20,
         dmg: 5,
-        imageIndex: 235,
+        imageIndex: 245,
         secondImageIndex: null,
         timeToSpawn: 20,
         speed: 1.5,
@@ -14,7 +14,7 @@ let enemyTypes = {
         maxHealth: 30,
         health: 30,
         dmg: 10,
-        imageIndex: 236,
+        imageIndex: 246,
         secondImageIndex: null,
         timeToSpawn: 20,
         speed: 1.5,
@@ -25,7 +25,7 @@ let enemyTypes = {
         maxHealth: 40,
         health: 40,
         dmg: 15,
-        imageIndex: 237,
+        imageIndex: 247,
         secondImageIndex: null,
         timeToSpawn: 20,
         speed: 1.7,
@@ -36,7 +36,7 @@ let enemyTypes = {
         maxHealth: 50,
         health: 50,
         dmg: 20,
-        imageIndex: 238,
+        imageIndex: 248,
         secondImageIndex: null,
         timeToSpawn: 20,
         speed: 1.7,
@@ -47,8 +47,8 @@ let enemyTypes = {
         maxHealth: 500,
         health: 500,
         dmg: 50,
-        imageIndex: 257,
-        secondImageIndex: 279,
+        imageIndex: 268,
+        secondImageIndex: 291,
         timeToSpawn: 50,
         speed: 1.2,
         secondImaeOffsetX: 0,
@@ -58,8 +58,8 @@ let enemyTypes = {
         maxHealth: 600,
         health: 600,
         dmg: 60,
-        imageIndex: 258,
-        secondImageIndex: 280,
+        imageIndex: 269,
+        secondImageIndex: 292,
         timeToSpawn: 50,
         speed: 1.3,
         secondImaeOffsetX: 0,
@@ -81,8 +81,8 @@ class Enemy{
         this.maxHealth = 100;
         this.health = 100;
         this.dmg = 100;
-        this.imageIndex = 257;
-        this.secondImageIndex = 279;
+        this.imageIndex = 268;
+        this.secondImageIndex = 291;
         this.secondImaeOffsetX = 0;
         this.secondImaeOffsetY = 0;
         this.timeToSpawn = 50;
@@ -105,8 +105,8 @@ class Enemy{
         updatableContext.fillStyle = "green";
         updatableContext.strokeStyle = "black";
 
-        updatableContext.fillRect(this.centerX - 20/2, this.centerY - 15, this.health*20/this.maxHealth, 5);
-        updatableContext.strokeRect(this.centerX - 20/2, this.centerY - 15, 20, 5);
+        updatableContext.fillRect(this.centerX - 20/2, this.centerY - 25, this.health*20/this.maxHealth, 5);
+        updatableContext.strokeRect(this.centerX - 20/2, this.centerY - 25, 20, 5);
 
         updatableContext.globalAlpha = 1;
     }
@@ -167,17 +167,23 @@ class Enemy{
         }
     }
     move(){
-        this.centerX += this.directionX * this.speed;
-        this.centerY += this.directionY * this.speed;
+        if(this.centerX != undefined && this.centerY != undefined && !isNaN(this.centerX) && !isNaN(this.centerY)){
+            this.centerX += this.directionX * this.speed;
+            this.centerY += this.directionY * this.speed;
 
-        if(this.angleOffset != undefined && this.angleOffset != 0){
-            this.angle += this.angleOffset/1.5;
-            this.angleOffset -= this.angleOffset/1.5;
+            if(this.angleOffset != undefined && this.angleOffset != 0){
+                this.angle += this.angleOffset/1.5;
+                this.angleOffset -= this.angleOffset/1.5;
 
-            if(this.angleOffset <= 0.2){
-                this.angle += this.angleOffset;
-                this.angleOffset=0;
+                if(this.angleOffset <= 0.2){
+                    this.angle += this.angleOffset;
+                    this.angleOffset=0;
+                }
             }
+        }else{
+            console.log(this.path);
+            this.centerX = this.path.indexX*tileSize+tileSize/2;
+            this.centerY = this.path.indexY*tileSize+tileSize/2;
         }
 
         if(this.path != null){
