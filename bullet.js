@@ -127,14 +127,20 @@ class Rocket1 extends Bullet{
 
         this.isFired = false;
     }
-    updateAngle(newAngle, turretX, turretY){
+    updateAngle(newAngle, turretX, turretY, isLeft = true){
         this.setDirectiron(newAngle);
 
         //calculate new position
+        let offset = 0.16 * tileSize;
         let newX, newY;
+        let dir = vectorFromAngle(degreesToRadian(90) + newAngle);
+        if(!isLeft) dir = vectorFromAngle(degreesToRadian(-90) + newAngle);
 
-        this.centerX = turretX;
-        this.centerY = turretY;
+        newX = turretX + dir.x * offset;
+        newY = turretY + dir.y * offset;
+
+        this.centerX = newX;
+        this.centerY = newY;
     }
     update(){
         if(!this.isFired) return;
@@ -166,6 +172,9 @@ class Rocket1 extends Bullet{
                 }
             }
         }
+    }
+    drawSelf(){
+        drawRotadedImage(this.imageIndex, this.centerX, this.centerY, this.angle + degreesToRadian(90));
     }
 }
 

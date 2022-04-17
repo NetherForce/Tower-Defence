@@ -116,10 +116,11 @@ class RocketTurred extends Turret{
         this.fireRate = 80;
         this.possibleTargets = {4: true, 5: true};
 
-        let newRocket = new bulletTypes[this.bulletType](map.idCount, this.id);
-        map.bullets[newRocket.id] = newRocket;
-        map.idCount++;
-        this.rocketId;
+        this.leftRocketId = null;
+        this.rightRocketId = null;
+
+        this.fireNext = 0; //0-fires left rocket, 1 - fires right rocket
+        this.reload();
         this.reload();
     }
     calculateAngle(){
@@ -128,18 +129,46 @@ class RocketTurred extends Turret{
             let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * futureSteps; //calculate for the next two steps
             let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * futureSteps; //calculate for the next two steps
             this.angle = Math.atan2(nextTargetY - this.centerY, nextTargetX - this.centerX);
-            if(this.rocketId != null && map.bullets[this.rocketId] != undefined) map.bullets[this.rocketId].updateAngle(this.angle, this.centerX, this.centerY);
+            if(this.leftRocketId != null && map.bullets[this.leftRocketId] != undefined) map.bullets[this.leftRocketId].updateAngle(this.angle, this.centerX, this.centerY, true);
+            if(this.rightRocketId != null && map.bullets[this.rightRocketId] != undefined) map.bullets[this.rightRocketId].updateAngle(this.angle, this.centerX, this.centerY, false);
         }
     }
     shoot(){
-        if(this.target != null && this.rocketId != null && map.bullets[this.rocketId] != undefined){
-            map.bullets[this.rocketId].isFired = true;
-            this.rocketId = null;
+        if(this.fireNext == 0){
+            if(this.leftRocketId != null && map.bullets[this.leftRocketId] != undefined){
+                map.bullets[this.leftRocketId].isFired = true;
+                this.leftRocketId = null;
+                this.fireNext = 1;
+            }else if(this.rightRocketId != null && map.bullets[this.rightRocketId] != undefined){
+                map.bullets[this.rightRocketId].isFired = true;
+                this.rightRocketId = null;
+                this.fireNext = 0;
+            }
+        }else{
+            if(this.rightRocketId != null && map.bullets[this.rightRocketId] != undefined){
+                map.bullets[this.rightRocketId].isFired = true;
+                this.rightRocketId = null;
+                this.fireNext = 0;
+            }else if(this.leftRocketId != null && map.bullets[this.leftRocketId] != undefined){
+                map.bullets[this.leftRocketId].isFired = true;
+                this.leftRocketId = null;
+                this.fireNext = 1;
+            }
         }
     }
     reload(){
-        if(this.rocketId == null){
-            this.rocketId = map.addRocket(this);
+        if(this.fireNext == 0){
+            if(this.leftRocketId == null){
+                this.leftRocketId = map.addRocket(this, true);
+            }else if(this.rightRocketId == null){
+                this.rightRocketId = map.addRocket(this, false);
+            }
+        }else{
+            if(this.rightRocketId == null){
+                this.rightRocketId = map.addRocket(this, false);
+            }else if(this.leftRocketId == null){
+                this.leftRocketId = map.addRocket(this, true);
+            }
         }
     }
     update(time){
@@ -159,6 +188,9 @@ class RocketTurred extends Turret{
             }
         }else{
             this.findTarget();
+            if(this.target == null && time%this.fireRate == 0 && (this.leftRocketId == null || this.rightRocketId == null)){
+                this.reload();
+            }
         }
     }
 }
@@ -171,11 +203,6 @@ class BigRocketTurred extends Turret{
         this.bulletType = 9;
         this.fireRate = 50;
         this.possibleTargets = {4: true, 5: true};
-
-        this.leftRocket = null;
-        this.rightRocket = null;
-
-        this.fireNext = 0; //0-fires left rocket, 1 - fires right rocket
     }
     calculateAngle(){
         if(this.target != null){
@@ -229,11 +256,29 @@ let turretTypes = {
 }
 
 //display indexes
-let turretDisplayIndex = {
-    0: 249,
-    1: 250,
-    2: 226,
-    3: 203,
-    4: 205,
-    5: 206
+let turretDisplayInfo = {
+    0: {
+        imageIndex: 249,
+        reach: 120,
+    },
+    1: {
+        imageIndex: 250,
+        reach: 150,
+    },
+    2: {
+        imageIndex: 226,
+        reach: 150,
+    },
+    3: {
+        imageIndex: 203,
+        reach: 175,
+    },
+    4: {
+        imageIndex: 205,
+        reach: 200,
+    },
+    5: {
+        imageIndex: 206,
+        reach: 200,
+    },
 }

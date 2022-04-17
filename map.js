@@ -21,21 +21,11 @@ class Map{
         this.endIndexY;
         this.path;
         this.enemies = {};
-        this.enemiesToSpawn = [[3, 10000]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.enemiesToSpawn = [[4, 100]]; //keeps track of the enemy types it needs to spawn and the number of them
         this.turrets = {};
         this.bullets = {};
         this.idCount = 0;
         this.globalHealth = 100;
-    }
-    drawBackgroundTiles(){
-        context.clearRect(0, 0, context.width, context.height);
-
-        for(let i = 0; i < this.sizeX; i++){
-            for(let j = 0; j < this.sizeY; j++){
-                tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
-                tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
-            }
-        }
     }
     drawCanvasOutline(){
         for(let i = 0; i < this.sizeX+1; i++){
@@ -53,6 +43,17 @@ class Map{
             context.lineTo(i*tileSize, this.sizeX*tileSize);
             context.stroke();
         }
+    }
+    drawBackgroundTiles(){
+        context.clearRect(0, 0, context.width, context.height);
+
+        for(let i = 0; i < this.sizeX; i++){
+            for(let j = 0; j < this.sizeY; j++){
+                tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
+                tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
+            }
+        }
+        this.drawCanvasOutline();
     }
     calculateNextPathIndex(currIndexX, currIndexY, pastIndexX, pastIndexY){
         //currIndexX, currIndexY - indexes of the tiles we want to continue the path from
@@ -133,13 +134,13 @@ class Map{
 
         this.bullets[newBullet.id] = newBullet;
     }
-    addRocket(turret){
+    addRocket(turret, isLeft = true){
         let newBullet = new bulletTypes[turret.bulletType](this.idCount, turret.id);
         this.idCount++;
 
         newBullet.setDirectiron(turret.angle);
 
-        newBullet.updateAngle(turret.angle, turret.centerX, turret.centerY);
+        newBullet.updateAngle(turret.angle, turret.centerX, turret.centerY, isLeft);
 
         this.bullets[newBullet.id] = newBullet;
 

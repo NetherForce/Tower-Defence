@@ -4,7 +4,7 @@ let isInEditiongMode = false;
 let currEditIndex = 130;
 let time = 0;
 let currEnemy;
-let currTurrType = 1;
+let currTurrType = 4;
 let gameStoped = false;
 
 window.addEventListener("load", function() {
@@ -100,12 +100,12 @@ function draw() {
                     updatableContext.fillStyle = "red";
                 }
                 updatableContext.beginPath();
-                // updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, currTurr.reach, 0, 2 * Math.PI, false);
+                updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, turretDisplayInfo[currTurrType].reach, 0, 2 * Math.PI, false);
                 updatableContext.stroke();
                 updatableContext.fillRect(indexX*tileSize, indexY*tileSize, tileSize, tileSize);
                 updatableContext.globalAlpha = 1;
                 
-                drawRotadedImage(turretDisplayIndex[currTurrType], indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, degreesToRadian(90));
+                drawRotadedImage(turretDisplayInfo[currTurrType].imageIndex, indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, degreesToRadian(90));
             }
         }
     }
