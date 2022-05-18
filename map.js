@@ -21,11 +21,23 @@ class Map{
         this.endIndexY;
         this.path;
         this.enemies = {};
-        this.enemiesToSpawn = [[4, 100]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.enemiesToSpawn = []; //keeps track of the enemy types it needs to spawn and the number of them
         this.turrets = {};
         this.bullets = {};
         this.idCount = 0;
         this.globalHealth = 100;
+    }
+    fillWithDefaultTiles(defaultTileID){
+        this.tiles = [];
+        this.overlapTiles = [];
+        for(let i = 0; i < this.sizeX; i++){
+            this.tiles[i] = [];
+            this.overlapTiles[i] = [];
+            for(let j = 0; j < this.sizeY; j++){
+                this.tiles[i][j] = defaultTileID;
+                this.overlapTiles[i][j] = -1;
+            }
+        }
     }
     drawCanvasOutline(){
         for(let i = 0; i < this.sizeX+1; i++){

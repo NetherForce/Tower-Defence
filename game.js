@@ -1,6 +1,6 @@
 endelessCanvas = true;
 let map;
-let isInEditiongMode = false;
+let isInEditiongMode = true;
 let currEditIndex = 130;
 let time = 0;
 let currEnemy;
@@ -14,9 +14,10 @@ window.addEventListener("load", function() {
 
 function setMap(aMap){
     map = aMap;
-    for(let key in maps[0]){
-        map[key] = maps[0][key];
-    }
+    // for(let key in maps[0]){
+    //     map[key] = maps[0][key];
+    // }
+    map.fillWithDefaultTiles(0);
     map.drawBackgroundTiles();
     map.calculatePath();
 
@@ -72,7 +73,7 @@ function update() {
 }
 
 function draw() {
-    if(map){
+    if(map && !isInEditiongMode){
         updatableContext.clearRect(0, 0, updatableCanvas.width, updatableCanvas.height);
         for(let i in map.enemies){
             let theEnemy = map.enemies[i];
