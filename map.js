@@ -49,11 +49,13 @@ class Map{
 
         for(let i = 0; i < this.sizeX; i++){
             for(let j = 0; j < this.sizeY; j++){
+                // console.log(i, j, this.tiles);
+                // console.log(this.tiles[i][j].type, this.offsetX, this.offsetY);
                 tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
                 tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
             }
         }
-        this.drawCanvasOutline();
+        // this.drawCanvasOutline();
     }
     calculateNextPathIndex(currIndexX, currIndexY, pastIndexX, pastIndexY){
         //currIndexX, currIndexY - indexes of the tiles we want to continue the path from

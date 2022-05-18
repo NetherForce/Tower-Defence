@@ -6,19 +6,30 @@ let time = 0;
 let currEnemy;
 let currTurrType = 4;
 let gameStoped = false;
+let gameStarted = false;
 
 window.addEventListener("load", function() {
-    let aMap = new Map(20, 20);
-    setMap(aMap);
+    addAllLevelButtons();
+
+    // let aMap = new Map(20, 20);
+    // setMap(aMap);
 });
 
-function setMap(aMap){
+function setMap(aMap, mapToCopy){
     map = aMap;
-    for(let key in maps[0]){
-        map[key] = maps[0][key];
+    if(maps[mapToCopy] != undefined){
+        for(let key in maps[mapToCopy]){
+            map[key] = maps[mapToCopy][key];
+        }
+    }else{
+        for(let key in maps[0]){
+            map[key] = maps[0][key];
+        }
     }
     map.drawBackgroundTiles();
     map.calculatePath();
+
+    gameStarted = true;
 
     // for(let i=0; i < map.sizeX; i++){
     //     for(let j = 0; j < map.sizeY; j++){
@@ -28,7 +39,7 @@ function setMap(aMap){
 }
 
 function update() {
-    if(gameStoped) return;
+    if(gameStoped || !gameStarted) return;
     time++;
     if(map){
         for(let i in map.enemies){
@@ -72,6 +83,7 @@ function update() {
 }
 
 function draw() {
+    if(!gameStarted) return;
     if(map){
         updatableContext.clearRect(0, 0, updatableCanvas.width, updatableCanvas.height);
         for(let i in map.enemies){
@@ -116,9 +128,11 @@ function keyup(key) {
 };
 
 function mouseup(info) {
-    console.log(info.button);
+    // console.log(info.button);
     let indexX = Math.floor(mouseX/tileSize);
     let indexY = Math.floor(mouseY/tileSize);
+
+    if(map == undefined || !gameStarted) return;
 
     if(indexX < map.sizeX && indexY < map.sizeY) console.log(map.tiles[indexX][indexY], map.overlapTiles[indexX][indexY]);    
     // //for testing only

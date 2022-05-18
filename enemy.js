@@ -181,7 +181,6 @@ class Enemy{
                 }
             }
         }else{
-            console.log(this.path);
             this.centerX = this.path.indexX*tileSize+tileSize/2;
             this.centerY = this.path.indexY*tileSize+tileSize/2;
         }
