@@ -4,12 +4,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body onload="init()">
-    <button id="buttonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
-    <div id="mapEditToolHolder">
+
+    <div id="mainMenu">
+        <div id="buttonHolder">
+            <button id="ChooseLevel" class="sandStone" onclick="onChooseLevelClick()">Choose level
+                <div class="buttonPointer"></div>
+            </button>
+        </div>
     </div>
-    <canvas id="updatable-canvas"></canvas>
-    <canvas id="canvas-id"></canvas>
-    <canvas id="tilesheetCanvas" style="display: none;"></canvas>
+
+    <div id="levelChoose" style="display: none;">
+        <div id="buttonHolder" class="sandStone">
+            <button id="buttonToClone" class="sandStone" style="display: none;" onclick="onLevelButtonClick(this.id)">
+                <p>1</p>
+                <div class="buttonPointer"></div>
+            </button>
+        </div>
+    </div>
+
+    <div id="gameMenu" style="display: none;">
+        <button id="buttonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
+        <div id="mapEditToolHolder">
+        </div>
+        <canvas id="updatable-canvas"></canvas>
+        <canvas id="canvas-id"></canvas>
+        <canvas id="tilesheetCanvas" style="display: none;"></canvas>
+    </div>
 
     <script src="globalStuff.js"></script>
     <script src="maps.js"></script>

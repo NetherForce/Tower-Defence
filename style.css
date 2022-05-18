@@ -4,10 +4,246 @@ body, canvas {
     overflow: hidden;
 }
 
+@font-face {
+    font-family: Fanwood;
+    src: url(fonts/webfontkit-20220418-034242/fanwoodtext-regular-webfont.woff);
+}
+
 body{
     position: relative;
 }
 
+/* border and background styles */
+.grassDirt{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile157.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile050.png') 33% round !important;
+}
+
+.sandDirt{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile160.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile050.png') 33% round !important;
+}
+
+.stoneDirt{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile159.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile050.png') 33% round !important;
+}
+
+.dirtGrass{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile158.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile119.png') 33% round !important;
+}
+
+.sandGrass{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile160.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile119.png') 33% round !important;
+}
+
+.stoneGrass{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile159.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile119.png') 33% round !important;
+}
+
+.grassSand{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile157.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile188.png') 33% round !important;
+}
+
+.dirtSand{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile158.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile188.png') 33% round !important;
+}
+
+.stoneSand{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile159.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile188.png') 33% round !important;
+}
+
+.grassStone{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile157.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile257.png') 33% round !important;
+}
+
+.dirtStone{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile158.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile257.png') 33% round !important;
+}
+
+.sandStone{
+    border: 10px solid transparent !important;
+    padding: 15px;
+    background-image: url('assets/PNG/Default size/towerDefense_tile160.png') !important;
+    border-image: url('assets/PNG/Default size/towerDefense_tile257.png') 33% round !important;
+}
+
+/* main menu css */
+#mainMenu{
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("assets/html/background_screenshot.png");
+    background-size: cover;
+    /* object-fit: cover; */
+  
+    /* this is what centers your element in the fixed wrapper*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center; /* aligns on vertical for column */
+    align-items: center; /* aligns on horizontal for column */
+}
+
+#mainMenu button{
+    box-sizing: border-box;
+    border: 0.2rem;
+    border-style: solid;
+    border-width: 0.4rem;
+    border-radius: 0.2rem;
+
+    position: relative;
+    
+    font-family: Fanwood;
+    font-size: xx-large;
+    font-weight: bolder;
+    color: white;
+}
+#mainMenu button .buttonPointer{
+    background-image: url('assets/PNG/Default size/towerDefense_tile295.png') !important;
+    background-size: contain;
+
+    height: 5rem;
+    width: 5rem;
+
+    left: -5rem;
+    top: calc(50% - 2.5rem);
+
+    visibility: hidden;
+
+    box-sizing: border-box;
+
+    position: absolute;
+    transform: rotate(-90deg);;
+}
+
+#mainMenu button:hover .buttonPointer{
+    visibility: visible !important;
+}
+
+#mainMenu #buttonHolder{
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    height: 70%;
+}
+
+/* level choose menu css */
+#levelChoose{
+    position:fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("assets/html/background_screenshot.png");
+    background-size: cover;
+    /* object-fit: cover; */
+  
+    /* this is what centers your element in the fixed wrapper*/
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center; /* aligns on vertical for column */
+    align-items: center; /* aligns on horizontal for column */
+}
+
+#levelChoose #buttonHolder{
+    display: inline-block;
+    width: 60%;
+    height: 60%;
+    text-align: center;
+}
+
+#levelChoose button{
+    box-sizing: border-box;
+    border: 0.1rem;
+    border-style: solid;
+    border-width: 0.3rem !important;
+    border-radius: 0.2rem;
+
+    width: 3rem;
+    height: 3rem;
+
+    padding: 0rem;
+    margin: 0.2rem;
+
+    position: relative;
+    
+    font-family: Fanwood;
+    font-size: 2rem;
+    font-weight: bolder;
+    color: white;
+}
+
+#levelChoose button p{
+    position: absolute;
+    display: inline-block;
+    left: 0rem;
+    top: 0rem;
+    margin: 0rem;
+    padding: 0rem;
+
+    width: 100%;
+    height: 100%;
+}
+
+#levelChoose button .buttonPointer{
+    background-image: url('assets/PNG/Default size/towerDefense_tile295.png') !important;
+    background-size: contain;
+
+    height: 5rem;
+    width: 5rem;
+
+    left: -5rem;
+    top: calc(50% - 2.5rem);
+
+    visibility: hidden;
+
+    box-sizing: border-box;
+
+    position: absolute;
+    transform: rotate(-90deg);;
+}
+
+#levelChoose button .buttonPointer:hover{
+    pointer-events: none;
+}
+
+#levelChoose button:hover .buttonPointer{
+    visibility: visible !important;
+}
+
+/* game menu css */
 #tilesheetCanvas{
     position: absolute;
     left: 0rem;

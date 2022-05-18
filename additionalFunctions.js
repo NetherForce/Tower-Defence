@@ -54,3 +54,8 @@ function radianToDegrees(rad){
 function vectorFromAngle(angle){
     return normalizeVector(Math.cos(angle), Math.sin(angle));
 }
+
+function returnOnlyNumbersFromString(string){
+    let res = string.replace(/\D/g, "");
+    return JSON.parse(res);
+}
