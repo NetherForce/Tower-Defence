@@ -3,7 +3,7 @@ class Bullet{
         this.id = id_;
         this.centerX = 0;
         this.centerY = 0;
-        this.speed = 10;
+        this.speed = 0.5;
         this.directionX = 0;
         this.directionY = 0;
         this.angle = 0;
@@ -19,8 +19,8 @@ class Bullet{
         this.directionY = dir.y;
     }
     update(){
-        this.centerX += this.directionX*this.speed;
-        this.centerY += this.directionY*this.speed;
+        this.centerX += this.directionX*this.speed*tileSize;
+        this.centerY += this.directionY*this.speed*tileSize;
     
         if(!areColliding(this.centerX-tileSize/2, this.centerY-tileSize/2, tileSize, tileSize, 0, 0, map.sizeX*tileSize, map.sizeY*tileSize)){
             map.removeBullet(this.id);
@@ -104,7 +104,7 @@ class Bullet7 extends Bullet{
     constructor(id_, parentId_){
         super(id_, parentId_);
         this.imageIndex = 297;
-        this.speed = 10;
+        this.speed = 0.5;
         this.dmg = 30;
     }
 }
@@ -113,7 +113,7 @@ class Bullet8 extends Bullet{
     constructor(id_, parentId_){
         super(id_, parentId_);
         this.imageIndex = 298;
-        this.speed = 10;
+        this.speed = 0.5;
         this.dmg = 35;
     }
 }
@@ -122,7 +122,7 @@ class Rocket1 extends Bullet{
     constructor(id_, parentId_){
         super(id_, parentId_);
         this.imageIndex = 251;
-        this.speed = 10;
+        this.speed = 0.5;
         this.dmg = 100;
 
         this.isFired = false;
@@ -145,8 +145,8 @@ class Rocket1 extends Bullet{
     update(){
         if(!this.isFired) return;
 
-        this.centerX += this.directionX*this.speed;
-        this.centerY += this.directionY*this.speed;
+        this.centerX += this.directionX*this.speed*tileSize;
+        this.centerY += this.directionY*this.speed*tileSize;
     
         if(!areColliding(this.centerX-tileSize/2, this.centerY-tileSize/2, tileSize, tileSize, 0, 0, map.sizeX*tileSize, map.sizeY*tileSize)){
             map.removeBullet(this.id);
@@ -182,7 +182,7 @@ class Rocket2 extends Bullet{
     constructor(id_, parentId_){
         super(id_, parentId_);
         this.imageIndex = 252;
-        this.speed = 10;
+        this.speed = 0.5;
         this.dmg = 120;
 
         this.isFired = false;
@@ -193,14 +193,14 @@ class Rocket2 extends Bullet{
         //calculate new position
         let newX, newY;
 
-        // this.centerX = newX;
-        // this.centerY = newY;
+        this.centerX = turretX;
+        this.centerY = turretY;
     }
     update(){
         if(!this.isFired) return;
 
-        this.centerX += this.directionX*this.speed;
-        this.centerY += this.directionY*this.speed;
+        this.centerX += this.directionX*this.speed*tileSize;
+        this.centerY += this.directionY*this.speed*tileSize;
     
         if(!areColliding(this.centerX-tileSize/2, this.centerY-tileSize/2, tileSize, tileSize, 0, 0, map.sizeX*tileSize, map.sizeY*tileSize)){
             map.removeBullet(this.id);
@@ -240,5 +240,5 @@ let bulletTypes = {
     6: Bullet7,
     7: Bullet8,
     8: Rocket1,
-    9: Rocket1,
+    9: Rocket2,
 }

@@ -1,11 +1,11 @@
 function onEditToolButtonClick(type){
-    let tileType = parseInt(type);
+    let tileType = returnOnlyNumbersFromString(type);
     currEditIndex = tileType;
 }
 
 function addEditToolButton(indexX, indexY){
-    let elementCopy = document.getElementById("buttonOptionToCopy").cloneNode(true);
-    elementCopy.id = indexToId(indexX, indexY);
+    let elementCopy = document.getElementById("mapEditButtonOptionToCopy").cloneNode(true);
+    elementCopy.id = "mapEditButtonOption" + indexToId(indexX, indexY);
     elementCopy.style.display = "inline";
 
     elementCopy.style.backgroundPosition = ""+(-indexX*32 + "px ") + (-indexY*32 + "px");
@@ -85,7 +85,7 @@ function addAllLevelButtons(){
 function onLevelButtonClick(level){
     level = returnOnlyNumbersFromString(level);
     
-    let aMap = new Map(20, 20);
+    let aMap = new Map(gridSizeX, gridSizeY);
     if(levelButtonsInfo[level] != undefined && levelButtonsInfo[level].map != undefined){
         setMap(aMap, levelButtonsInfo[level].map);
     }else{
@@ -93,4 +93,39 @@ function onLevelButtonClick(level){
     }
 
     switchMenus("gameMenu", "flex");
+}
+
+function onGameToolButtonClick(type){
+    let turretType = returnOnlyNumbersFromString(type);
+    currTurrType = turretType;
+}
+
+function addGameToolButton(type, imageIndex, price){
+    let elementCopy = document.getElementById("gameButtonOptionToCopy").cloneNode(true);
+    elementCopy.id = "gameButtonOption_" + type;
+    elementCopy.style.display = "inline";
+
+    index = idToIndex(imageIndex);
+
+    elementCopy.querySelector(".gameButtonImage").style.backgroundPosition = ""+(-index.x*32 + "px ") + (-index.y*32 + "px");
+
+    elementCopy.querySelector(".gameButtonPriceDisplayer").innerHTML = price + "C";
+
+    document.getElementById("gameToolHolder").appendChild(elementCopy);
+}
+
+function switchMenus(menuId, newDisplay){
+    document.getElementById("mainMenu").style.display = "none";
+    document.getElementById("levelChoose").style.display = "none";
+    document.getElementById("gameMenu").style.display = "none";
+
+    document.getElementById(menuId).style.display = newDisplay;
+}
+
+function updateHealthStat(hp){
+    document.getElementById("healthStat").innerHTML = hp + "HP";
+}
+
+function updateCoinStat(coins){
+    document.getElementById("coinStat").innerHTML = coins + "C";
 }

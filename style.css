@@ -11,6 +11,13 @@ body, canvas {
 
 body{
     position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+html{
+    width: 100%;
+    height: 100%;
 }
 
 /* border and background styles */
@@ -244,6 +251,50 @@ body{
 }
 
 /* game menu css */
+#gameMenu{
+    width: 100%;
+    height: 100%;
+    
+    display: flex;
+    flex-direction: column;
+}
+#gameTools{
+    display: flex;
+    flex-direction: row;
+}
+#turretButtonHolder{
+    box-sizing: border-box;
+    width: 50%;
+    height: 100%;
+    padding-right: 1rem;
+}
+#statHolder{
+    box-sizing: border-box;
+    width: 50%;
+    height: 100%;
+    padding-left: 1rem;
+    vertical-align: center;
+
+    font-family: Fanwood;
+    font-size: 32px;
+    /* font-weight: bolder; */
+    color: black;
+}
+#healthStat{
+    width: 50%;
+    display: inline;
+}
+#coinStat{
+    width: 50%;
+    display: inline;
+}
+
+#toolHolder{
+    padding-top: 0.3rem;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
 #tilesheetCanvas{
     position: absolute;
     left: 0rem;
@@ -251,11 +302,6 @@ body{
 }
 
 #mapEditToolHolder{
-    position: absolute;
-    bottom: 0rem;
-    left: 0rem;
-    width: 100%;
-    height: 7rem;
     overflow-x: auto;
 }
 
@@ -267,11 +313,44 @@ body{
     background-size: 736px 416px;
 }
 
+#gameToolHolder{
+    overflow-x: auto;
+    text-align: right;
+}
+
+.gameButton{
+    margin: 0.1rem;
+}
+
+.gameButton .gameButtonImage{
+    width:32px;
+    height:32px;
+    background-image: url('assets/Tilesheet/towerDefense_tilesheet@2.png');
+    background-position: -0px -0px;
+    background-size: 736px 416px;
+    margin: 0.1rem;
+}
+
+.gameButton .gameButtonPriceDisplayer{
+    margin: 0.1rem;
+    font-family: Fanwood;
+    font-size: 12px;
+    /* font-weight: bolder; */
+    color: black;
+}
+
+#canvasHolder{
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
 #canvas-id{
     position: absolute;
     left: 0rem;
     top: 0rem;
     z-index: 1;
+    padding: 0px !important;
+    box-sizing: border-box;
 }
 
 #updatable-canvas{

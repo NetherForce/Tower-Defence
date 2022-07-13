@@ -5,6 +5,9 @@ updatableContext.globalAlpha = 0.5;
 updatableContext.fillStyle = "purple";
 updatableContext.fillRect(0, 0, updatableCanvas.width, updatableCanvas.height);
 
+var gridSizeX = 20;
+var gridSizeY = 20;
+
 var tilesYouCanBuildOn = {
     48: true,
     53: true,
@@ -22,3 +25,5 @@ var tilesYouCanBuildOn = {
     152: true,
     153: true,
 }
+
+var borderSize = 25;

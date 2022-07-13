@@ -59,3 +59,7 @@ function returnOnlyNumbersFromString(string){
     let res = string.replace(/\D/g, "");
     return JSON.parse(res);
 }
+
+function getNameOfDocumentFromSource(src){
+    return src.match(/[^\/]+(?=\.[^\/.]*$)/, "")[0];
+}

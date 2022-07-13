@@ -6,9 +6,10 @@ let enemyTypes = {
         imageIndex: 245,
         secondImageIndex: null,
         timeToSpawn: 20,
-        speed: 1.5,
+        speed: 0.05,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 10,
     },
     1: {
         maxHealth: 30,
@@ -17,9 +18,10 @@ let enemyTypes = {
         imageIndex: 246,
         secondImageIndex: null,
         timeToSpawn: 20,
-        speed: 1.5,
+        speed: 0.05,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 15,
     },
     2: {
         maxHealth: 40,
@@ -28,9 +30,10 @@ let enemyTypes = {
         imageIndex: 247,
         secondImageIndex: null,
         timeToSpawn: 20,
-        speed: 1.7,
+        speed: 0.035,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 20,
     },
     3: {
         maxHealth: 50,
@@ -39,9 +42,10 @@ let enemyTypes = {
         imageIndex: 248,
         secondImageIndex: null,
         timeToSpawn: 20,
-        speed: 1.7,
+        speed: 0.035,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 25,
     },
     4: {
         maxHealth: 500,
@@ -50,9 +54,10 @@ let enemyTypes = {
         imageIndex: 268,
         secondImageIndex: 291,
         timeToSpawn: 50,
-        speed: 1.2,
+        speed: 0.025,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 50,
     },
     5: {
         maxHealth: 600,
@@ -61,9 +66,10 @@ let enemyTypes = {
         imageIndex: 269,
         secondImageIndex: 292,
         timeToSpawn: 50,
-        speed: 1.3,
+        speed: 0.03,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
+        rewardedCoins: 100,
     }
 }
 
@@ -74,7 +80,7 @@ class Enemy{
         this.centerY;
         this.angle=0;
         this.angleOffset=0;
-        this.speed=1.2;
+        this.speed=0.025;
         this.path = path_;
         this.directionX;
         this.directionY;
@@ -90,7 +96,7 @@ class Enemy{
     }
     setByType(type){
         this.type = type;
-        type = enemyTypes[type]
+        type = enemyTypes[type];
         for(let key in type){
             this[key] = type[key];
         }
@@ -168,8 +174,8 @@ class Enemy{
     }
     move(){
         if(this.centerX != undefined && this.centerY != undefined && !isNaN(this.centerX) && !isNaN(this.centerY)){
-            this.centerX += this.directionX * this.speed;
-            this.centerY += this.directionY * this.speed;
+            this.centerX += this.directionX * this.speed*tileSize;
+            this.centerY += this.directionY * this.speed*tileSize;
 
             if(this.angleOffset != undefined && this.angleOffset != 0){
                 this.angle += this.angleOffset/1.5;
@@ -186,7 +192,7 @@ class Enemy{
         }
 
         if(this.path != null){
-            if(getDistance(this.centerX, this.centerY, this.path.indexX*tileSize+tileSize/2, this.path.indexY*tileSize+tileSize/2) <= this.speed){
+            if(getDistance(this.centerX, this.centerY, this.path.indexX*tileSize+tileSize/2, this.path.indexY*tileSize+tileSize/2) <= this.speed*tileSize){
                 this.centerX = this.path.indexX*tileSize+tileSize/2;
                 this.centerY = this.path.indexY*tileSize+tileSize/2;
 

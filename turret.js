@@ -1,17 +1,24 @@
 class Turret{
     constructor(id_, indexX, indexY, type_){
         this.id = id_;
-        this.centerX = indexX*tileSize+tileSize/2;
-        this.centerY = indexY*tileSize+tileSize/2;
+        this.indexX = indexX;
+        this.indexY = indexY;
         this.angle = 0;
         this.fireRate = 10;
         this.bulletType;
         this.target = null;
         this.possibleTargets;
         this.imageIndex = 249;
-        this.reach = 3;
+        this.reachIndex = 3; //as an index
         this.type = type_;
         // console.log(type_);
+
+        this.centerX = this.indexX*tileSize+tileSize/2;
+        this.centerY = this.indexY*tileSize+tileSize/2;
+
+        this.audio = {
+            shoot: "bang_02",
+        }
     }
     drawSelf(){
         drawRotadedImage(this.imageIndex, this.centerX, this.centerY, this.angle + degreesToRadian(90));
@@ -20,8 +27,8 @@ class Turret{
     calculateAngle(){
         if(this.target != null){
             let futureSteps = 2;
-            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * futureSteps; //calculate for the next two steps
-            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * futureSteps; //calculate for the next two steps
+            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
+            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
             this.angle = Math.atan2(nextTargetY - this.centerY, nextTargetX - this.centerX);
         }
     }
@@ -32,7 +39,7 @@ class Turret{
             let enemy = map.enemies[i];
             if(this.possibleTargets[enemy.type]){
                 let dist = getDistance(this.centerX, this.centerY, enemy.centerX, enemy.centerY);
-                if((this.target == null || dist < minDistance) && dist < this.reach){
+                if((this.target == null || dist < minDistance) && dist < this.reachIndex * tileSize){
                     this.target = enemy;
                     minDistance = dist;
                 }
@@ -42,6 +49,7 @@ class Turret{
     shoot(){
         if(this.target != null){
             map.addBullet(this);
+            copyAudioAndPlay(this.audio.shoot);
         }
     }
     update(time){
@@ -54,7 +62,7 @@ class Turret{
             if(time%this.fireRate == 0){
                 this.shoot();
             }
-            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reach){
+            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reachIndex * tileSize){
                 this.findTarget();
             }
         }else{
@@ -67,10 +75,14 @@ class GreenTurret extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 249;
-        this.reach = 120;
+        this.reachIndex = 4;
         this.bulletType = 0;
         this.fireRate = 30;
         this.possibleTargets = {0: true, 1: true, 2: true, 3:true};
+        
+        this.audio = {
+            shoot: "bang_10",
+        }
     }
 }
 
@@ -78,7 +90,7 @@ class RedTurret extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 250;
-        this.reach = 150;
+        this.reachIndex = 4.5;
         this.bulletType = 1;
         this.fireRate = 25;
         this.possibleTargets = {0: true, 1: true, 2: true, 3:true};
@@ -89,7 +101,7 @@ class GreyTurret1 extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 226;
-        this.reach = 150;
+        this.reachIndex = 4.5;
         this.bulletType = 4;
         this.fireRate = 30;
         this.possibleTargets = {0: true, 1: true, 2: true, 3:true};
@@ -100,7 +112,7 @@ class GreyTurret2 extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 203;
-        this.reach = 175;
+        this.reachIndex = 4.75;
         this.bulletType = 6;
         this.fireRate = 25;
         this.possibleTargets = {0: true, 1: true, 2: true, 3:true};
@@ -111,7 +123,7 @@ class RocketTurred extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 228;
-        this.reach = 200;
+        this.reachIndex = 5;
         this.bulletType = 8;
         this.fireRate = 80;
         this.possibleTargets = {4: true, 5: true};
@@ -125,9 +137,9 @@ class RocketTurred extends Turret{
     }
     calculateAngle(){
         if(this.target != null){
-            let futureSteps = 2;
-            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * futureSteps; //calculate for the next two steps
-            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * futureSteps; //calculate for the next two steps
+            let futureSteps = 3;
+            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
+            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
             this.angle = Math.atan2(nextTargetY - this.centerY, nextTargetX - this.centerX);
             if(this.leftRocketId != null && map.bullets[this.leftRocketId] != undefined) map.bullets[this.leftRocketId].updateAngle(this.angle, this.centerX, this.centerY, true);
             if(this.rightRocketId != null && map.bullets[this.rightRocketId] != undefined) map.bullets[this.rightRocketId].updateAngle(this.angle, this.centerX, this.centerY, false);
@@ -155,6 +167,7 @@ class RocketTurred extends Turret{
                 this.fireNext = 1;
             }
         }
+        copyAudioAndPlay(this.audio.shoot);
     }
     reload(){
         if(this.fireNext == 0){
@@ -183,12 +196,12 @@ class RocketTurred extends Turret{
             }else if(time%(this.fireRate/2) == 0){
                 this.reload();
             }
-            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reach){
+            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reachIndex * tileSize){
                 this.findTarget();
             }
         }else{
             this.findTarget();
-            if(this.target == null && time%this.fireRate == 0 && (this.leftRocketId == null || this.rightRocketId == null)){
+            if(this.target == null && time%(this.fireRate/2) == 0 && (this.leftRocketId == null || this.rightRocketId == null)){
                 this.reload();
             }
         }
@@ -199,7 +212,7 @@ class BigRocketTurred extends Turret{
     constructor(id_, indexX, indexY, type_){
         super(id_, indexX, indexY, type_);
         this.imageIndex = 229;
-        this.reach = 200;
+        this.reachIndex = 5;
         this.bulletType = 9;
         this.fireRate = 50;
         this.possibleTargets = {4: true, 5: true};
@@ -207,8 +220,8 @@ class BigRocketTurred extends Turret{
     calculateAngle(){
         if(this.target != null){
             let futureSteps = 2;
-            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * futureSteps; //calculate for the next two steps
-            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * futureSteps; //calculate for the next two steps
+            let nextTargetX = this.target.centerX + this.target.directionX * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
+            let nextTargetY = this.target.centerY + this.target.directionY * this.target.speed * tileSize * futureSteps; //calculate for the next two steps
             this.angle = Math.atan2(nextTargetY - this.centerY, nextTargetX - this.centerX);
             if(this.rocketId != null && map.bullets[this.rocketId] != undefined) map.bullets[this.rocketId].updateAngle(this.angle, this.centerX, this.centerY);
         }
@@ -217,6 +230,7 @@ class BigRocketTurred extends Turret{
         if(this.target != null && this.rocketId != null && map.bullets[this.rocketId] != undefined){
             map.bullets[this.rocketId].isFired = true;
             this.rocketId = null;
+            copyAudioAndPlay(this.audio.shoot);
         }
     }
     reload(){
@@ -236,7 +250,7 @@ class BigRocketTurred extends Turret{
             }else if(time%(this.fireRate/2) == 0){
                 this.reload();
             }
-            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reach){
+            if(getDistance(this.centerX, this.centerY, this.target.centerX, this.target.centerY) > this.reachIndex * tileSize){
                 this.findTarget();
             }
         }else{
@@ -259,26 +273,44 @@ let turretTypes = {
 let turretDisplayInfo = {
     0: {
         imageIndex: 249,
-        reach: 120,
+        reachIndex: 3,
+        reloadTimes: 0,
+        cost: 100,
+        placeAudio: "bang_01",
     },
     1: {
         imageIndex: 250,
-        reach: 150,
+        reachIndex: 4.5,
+        reloadTimes: 0,
+        cost: 150,
+        placeAudio: "bang_01",
     },
     2: {
         imageIndex: 226,
-        reach: 150,
+        reachIndex: 4.5,
+        reloadTimes: 0,
+        cost: 200,
+        placeAudio: "bang_01",
     },
     3: {
         imageIndex: 203,
-        reach: 175,
+        reachIndex: 4.75,
+        reloadTimes: 0,
+        cost: 250,
+        placeAudio: "bang_01",
     },
     4: {
         imageIndex: 205,
-        reach: 200,
+        reachIndex: 5,
+        reloadTimes: 1,
+        cost: 350,
+        placeAudio: "bang_01",
     },
     5: {
         imageIndex: 206,
-        reach: 200,
+        reachIndex: 5,
+        reloadTimes: 2,
+        cost: 400,
+        placeAudio: "bang_01",
     },
 }

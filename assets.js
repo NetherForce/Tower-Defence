@@ -1,7 +1,7 @@
 let tilesheet = new Image();
 tilesheet.src = "./assets/Tilesheet/towerDefense_tilesheet@2.png";
 tilesheet.addEventListener("load", function() {
-    loadTiles("tilesheetCanvas", tilesheet, originalTileSize, 20, 20, sheetLenghtX, sheetLenghtY);
+    loadTiles("tilesheetCanvas", tilesheet, originalTileSize, gridSizeX, gridSizeY, sheetLenghtX, sheetLenghtY);
 });
 
 let originalTileSize = 128; //in pixels
@@ -35,21 +35,27 @@ function determineNewSize(cellCountX, cellCountY){
     return Math.min(originalTileSize, cellSize);
 }
 
-function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, sheetLenghtX, sheetLenghtY){
-    let newSize = determineNewSize(numCellsX, numCellsY)
-    tileSize = newSize;
-    cellStride = tileSize+distBetweenCanvasTiles;
-    
+function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, sheetLenghtX, sheetLenghtY, theSize = null){
+    let newSize;
     let theCanvas = document.getElementById(canvasId);
     let theContext = theCanvas.getContext("2d");
-    theCanvas.width = sheetLenghtX*cellStride;
-    theCanvas.height = sheetLenghtY*cellStride;
+    if(theSize == null){
+        newSize = determineNewSize(numCellsX, numCellsY);
+        tileSize = newSize;
+        cellStride = tileSize+distBetweenCanvasTiles;
 
-    canvas.width = numCellsX*cellStride;
-    canvas.height = numCellsY*cellStride;
+        theCanvas.width = sheetLenghtX*cellStride;
+        theCanvas.height = sheetLenghtY*cellStride;
 
-    updatableCanvas.width = numCellsX*cellStride;
-    updatableCanvas.height = numCellsY*cellStride;
+        canvas.width = numCellsX*cellStride;
+        canvas.height = numCellsY*cellStride;
+
+        updatableCanvas.width = numCellsX*cellStride;
+        updatableCanvas.height = numCellsY*cellStride;
+    }else{
+        newSize = theSize;
+        tileSize = newSize;
+    }
 
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);
     context.clearRect(0, 0, theCanvas.width, theCanvas.height);
@@ -67,6 +73,13 @@ function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, shee
             addEditToolButton(i, j);
         }
     }
+    isInEditiongMode ? document.getElementById("mapEditToolHolder").style.display = "block" : document.getElementById("mapEditToolHolder").style.display = "none";
+
+    document.getElementById("gameToolHolder").innerHTML = "";
+    for(let i in turretDisplayInfo){
+        addGameToolButton(i, turretDisplayInfo[i].imageIndex, turretDisplayInfo[i].cost);
+    }
+    !isInEditiongMode ? document.getElementById("gameToolHolder").style.display = "block" : document.getElementById("gameToolHolder").style.display = "none";
 
     tileCanvas = theCanvas;
 }

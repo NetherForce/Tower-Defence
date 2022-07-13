@@ -1,214 +1,286 @@
 ﻿<!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body onload="init()">
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body onload="init()">
 
-    <div id="mainMenu">
-        <div id="buttonHolder">
-            <button id="ChooseLevel" class="sandStone" onclick="onChooseLevelClick()">Choose level
-                <div class="buttonPointer"></div>
-            </button>
+        <div id="mainMenu">
+            <div id="buttonHolder">
+                <button id="ChooseLevel" class="sandStone" onclick="onChooseLevelClick()">Choose level
+                    <div class="buttonPointer"></div>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <div id="levelChoose" style="display: none;">
-        <div id="buttonHolder" class="sandStone">
-            <button id="buttonToClone" class="sandStone" style="display: none;" onclick="onLevelButtonClick(this.id)">
-                <p>1</p>
-                <div class="buttonPointer"></div>
-            </button>
+        <div id="levelChoose" style="display: none;">
+            <div id="buttonHolder" class="sandStone">
+                <button id="buttonToClone" class="sandStone" style="display: none;" onclick="onLevelButtonClick(this.id)">
+                    <p>1</p>
+                    <div class="buttonPointer"></div>
+                </button>
+            </div>
         </div>
-    </div>
 
-    <div id="gameMenu" style="display: none;">
-        <button id="buttonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
-        <div id="mapEditToolHolder">
+        <div id="gameMenu" style="display: none;">
+            <div id="toolHolder">
+                <div id="mapEditTools">
+                    <button id="mapEditButtonOptionToCopy" class="mapEditButton" style="display: none;" onclick='onEditToolButtonClick(this.id)'></button>
+                    <div id="mapEditToolHolder">
+                    </div>
+                </div>
+                <div id="gameTools">
+                    <div id="turretButtonHolder">
+                            <button class="gameButton" id="gameButtonOptionToCopy" style="display: none;" onclick='onGameToolButtonClick(this.id)'>
+                                <div class="gameButtonImage"></div>
+                                <div class="gameButtonPriceDisplayer">100C</div>
+                            </button>
+                        <div id="gameToolHolder">
+                        </div>
+                    </div>
+                    <div id="statHolder">
+                        <div id="healthStat">1000HP</div>
+                        <div id="coinStat">1000C</div>
+                    </div>
+                </div>
+            </div>
+            <div id="canvasHolder">
+                <canvas id="updatable-canvas"></canvas>
+                <canvas id="canvas-id" class="grassDirt"></canvas>
+                <canvas id="tilesheetCanvas" style="display: none;"></canvas>
+            </div>
         </div>
-        <canvas id="updatable-canvas"></canvas>
-        <canvas id="canvas-id"></canvas>
-        <canvas id="tilesheetCanvas" style="display: none;"></canvas>
-    </div>
 
-    <script src="globalStuff.js"></script>
-    <script src="maps.js"></script>
-    <script src="tiles.js"></script>
-    <script src="additionalFunctions.js"></script>
-    <script src="assets.js"></script>
-    <script src="htmlFunction.js"></script>
-    <script src="bullet.js"></script>
-    <script src="enemy.js"></script>
-    <script src="turret.js"></script>
-    <script src="map.js"></script>
-    <script src="game.js"></script>
+        <script src="globalStuff.js"></script>
+        <script src="maps.js"></script>
+        <script src="tiles.js"></script>
+        <script src="additionalFunctions.js"></script>
+        <script src="audio.js"></script>
+        <script src="assets.js"></script>
+        <script src="htmlFunction.js"></script>
+        <script src="bullet.js"></script>
+        <script src="enemy.js"></script>
+        <script src="turret.js"></script>
+        <script src="map.js"></script>
+        <script src="game.js"></script>
 
-    <script>
-        if(endlessCanvas == undefined){
-            var endlessCanvas = true;
-        }
-        var canvas = document.getElementById("canvas-id");
-        if(endlessCanvas){
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            window.onresize = function (){
+        <script>
+            if(endlessCanvas == undefined){
+                var endlessCanvas = true;
+            }
+            var canvas = document.getElementById("canvas-id");
+            if(endlessCanvas){
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-            };
-        }
-        else
-        {   
-            canvas.width = 800;
-            canvas.height = 600;
-        }
-        var context = canvas.getContext("2d");  
-        context.fillStyle = "#0000ff";
-        // global variables with mouse coordinates
-        var mouseX = 0;
-        var mouseY = 0;
 
-        // some keycodes
-        var key_left = 37;
-        var key_up = 38;
-        var key_right = 39;
-        var key_down = 40;
-        var key_a = 65;
-        var key_z = 90;
+                // window.onresize = function (){
+                //     tileSize = determineNewSize(map.sizeX, map.sizeY);
+                //     loadTiles("tilesheetCanvas", tilesheet, originalTileSize, map.sizeX, map.sizeY, sheetLenghtX, sheetLenghtY);
+                //     map.drawBackgroundTiles();
+                // };
+            }
+            else
+            {   
+                canvas.width = 800;
+                canvas.height = 600;
+            }
+            var context = canvas.getContext("2d");  
+            context.fillStyle = "#0000ff";
+            // global variables with mouse coordinates
+            var mouseX = 0;
+            var mouseY = 0;
 
-        var isKeyPressed = [];
-        for (i = 0; i < 256; ++i) {
-            isKeyPressed.push(0);
-        }
+            // some keycodes
+            var key_left = 37;
+            var key_up = 38;
+            var key_right = 39;
+            var key_down = 40;
+            var key_a = 65;
+            var key_z = 90;
 
-        // gridSize = 50; // uncomment or add to game.js if you want a grid
+            var isKeyPressed = [];
+            for (i = 0; i < 256; ++i) {
+                isKeyPressed.push(0);
+            }
 
-        var reqAnimationFrame =
-            window.requestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                setTimeout(callback, 1000 / 30);
-            };
+            // gridSize = 50; // uncomment or add to game.js if you want a grid
 
-        function redraw() {
-            // context.clearRect(0, 0, canvas.width, canvas.height);
-            /*context.globalAlpha = 1;
+            var reqAnimationFrame =
+                window.requestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.msRequestAnimationFrame ||
+                function (callback) {
+                    setTimeout(callback, 1000 / 30);
+                };
 
-            // draw grid
-            //context.fillStyle = "#FF0000";
-            context.font = "10px Arial";
-            if (typeof gridSize != "undefined" && gridSize >= 25) {
-                context.fillText(0, 4, 10);
-                context.beginPath();
-                for (i = gridSize; i < canvas.width; i += gridSize) {
-                    context.moveTo(i, 0);
-                    context.lineTo(i, canvas.height);
-                    context.fillText(i, i + 4, 10);
+            function redraw() {
+                // context.clearRect(0, 0, canvas.width, canvas.height);
+                /*context.globalAlpha = 1;
+
+                // draw grid
+                //context.fillStyle = "#FF0000";
+                context.font = "10px Arial";
+                if (typeof gridSize != "undefined" && gridSize >= 25) {
+                    context.fillText(0, 4, 10);
+                    context.beginPath();
+                    for (i = gridSize; i < canvas.width; i += gridSize) {
+                        context.moveTo(i, 0);
+                        context.lineTo(i, canvas.height);
+                        context.fillText(i, i + 4, 10);
+                    }
+                    for (i = gridSize; i < canvas.height; i += gridSize) {
+                        context.moveTo(0, i);
+                        context.lineTo(canvas.width, i);
+                        context.fillText(i, 4, i + 10);
+                    }
+                    context.stroke();
+                }*/
+
+
+                let rect = document.getElementById("canvasHolder").getBoundingClientRect();
+                borderSize = returnOnlyNumbersFromString(getComputedStyle(canvas, null).getPropertyValue('border-left-width')) + returnOnlyNumbersFromString(getComputedStyle(canvas, null).getPropertyValue('padding'));
+                let w = rect.right - rect.left - 2*borderSize;
+                let h = rect.bottom - rect.top - 2*borderSize;
+                let newCellSize = Math.floor(Math.min(w/gridSizeX, h/gridSizeY));
+                if(newCellSize != tileSize){
+                    let oldTileSize = tileSize;
+                    let cellStride = newCellSize;
+                    canvas.width = gridSizeX*cellStride;
+                    canvas.height = gridSizeY*cellStride;
+
+                    
+                    updatableCanvas.width = gridSizeX*cellStride;
+                    updatableCanvas.height = gridSizeY*cellStride;
+
+
+                    tileSize = newCellSize;
+                    if(map != undefined){
+                        loadTiles("tilesheetCanvas", tilesheet, originalTileSize, map.sizeX, map.sizeY, sheetLenghtX, sheetLenghtY, newCellSize);
+                        map.drawBackgroundTiles();
+                        map.fixPosisionsOnResize(oldTileSize, tileSize);
+                    }
                 }
-                for (i = gridSize; i < canvas.height; i += gridSize) {
-                    context.moveTo(0, i);
-                    context.lineTo(canvas.width, i);
-                    context.fillText(i, 4, i + 10);
-                }
-                context.stroke();
-            }*/
 
-            draw(); // call progammer's draw() function
+                canvas.style.left = "" + (rect.left + ((w - canvas.width) / 2) | 0) + "px";
+                canvas.style.top = "" + (rect.top + ((h - canvas.height) / 2) | 0) + "px";
+                updatableCanvas.style.left = "" + (rect.left + (((w - canvas.width) / 2) | 0) + borderSize) + "px";
+                updatableCanvas.style.top = "" + (rect.top + (((h - canvas.height) / 2) | 0) + borderSize) + "px";
 
-            reqAnimationFrame(redraw);
-        };
+                draw(); // call progammer's draw() function
 
-        function callupdate() {
-            update(); // call programmer's update() function
-            setTimeout(callupdate, 10); // and 10 ms after that ...
-        };
+                reqAnimationFrame(redraw);
+            };
 
-        function areColliding(Ax, Ay, Awidth, Aheight, Bx, By, Bwidth, Bheight) {
-            if (Bx <= Ax + Awidth) {
-                if (Ax <= Bx + Bwidth) {
-                    if (By <= Ay + Aheight) {
-                        if (Ay <= By + Bheight) {
-                            return 1;
+            function callupdate() {
+                update(); // call programmer's update() function
+                setTimeout(callupdate, 10); // and 10 ms after that ...
+            };
+
+            function areColliding(Ax, Ay, Awidth, Aheight, Bx, By, Bwidth, Bheight) {
+                if (Bx <= Ax + Awidth) {
+                    if (Ax <= Bx + Bwidth) {
+                        if (By <= Ay + Aheight) {
+                            if (Ay <= By + Bheight) {
+                                return 1;
+                            }
                         }
                     }
                 }
-            }
-            return 0;
-        };
+                return 0;
+            };
 
-        function init() {
-            if ('ontouchstart' in window || navigator.maxTouchPoints) {
-              isMobile = true;
-                window.addEventListener("touchstart", function (e) {
-                    var touchobj = e.changedTouches[0];
-                    mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
-                    mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
-                    // mousedown();
-                });
+            function init() {
+                if ('ontouchstart' in window || navigator.maxTouchPoints) {
+                isMobile = true;
+                    window.addEventListener("touchstart", function (e) {
+                        var touchobj = e.changedTouches[0];
+                        mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
+                        mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
+                        // mousedown();
+                        
+                        if(borderSize != undefined){
+                            mouseX -= borderSize;
+                            mouseY -= borderSize;
+                        }
+                    });
 
-                window.addEventListener("touchend", function (e) {
-                    var touchobj = e.changedTouches[0];
-                    mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
-                    mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
-                    // mouseup();
-                });
-                window.addEventListener("touchmove", function (e) {
-                    var touchobj = e.changedTouches[0];
-                    mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
-                    mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
-                });
-            } else {
-                window.addEventListener("mousemove", function (e) {
-                    mouseX = e.pageX - canvas.offsetLeft;
-                    mouseY = e.pageY - canvas.offsetTop;
-                });
-
-                if (typeof mousemove != "undefined") {
-                    window.addEventListener("mousemove", mousemove);
-                }
-                if (typeof mouseup != "undefined") {
-                    window.addEventListener("mouseup", mouseup);
-                }
-                if (typeof mousedown != "undefined") {
-                    window.addEventListener("mousedown", mousedown);
-                }
-
-                if (typeof keydown != "undefined") {
-                    window.addEventListener("keydown", function (e) {
-                        isKeyPressed[e.keyCode] = 1;
-                        keydown(e.keyCode);
+                    window.addEventListener("touchend", function (e) {
+                        var touchobj = e.changedTouches[0];
+                        mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
+                        mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
+                        // mouseup();
+                        
+                        if(borderSize != undefined){
+                            mouseX -= borderSize;
+                            mouseY -= borderSize;
+                        }
+                    });
+                    window.addEventListener("touchmove", function (e) {
+                        var touchobj = e.changedTouches[0];
+                        mouseX = parseInt(touchobj.pageX - canvas.offsetLeft);
+                        mouseY = parseInt(touchobj.pageY - canvas.offsetTop);
+                        
+                        if(borderSize != undefined){
+                            mouseX -= borderSize;
+                            mouseY -= borderSize;
+                        }
                     });
                 } else {
-                    window.addEventListener("keydown", function (e) {
-                        isKeyPressed[e.keyCode] = 1;
+                    window.addEventListener("mousemove", function (e) {
+                        mouseX = e.pageX - canvas.offsetLeft;
+                        mouseY = e.pageY - canvas.offsetTop;
+                        
+                        if(borderSize != undefined){
+                            mouseX -= borderSize;
+                            mouseY -= borderSize;
+                        }
                     });
-                }
-                if (typeof keyup != "undefined") {
-                    window.addEventListener("keyup", function (e) {
-                        isKeyPressed[e.keyCode] = 0;
-                        keyup(e.keyCode);
-                    });
-                } else {
-                    window.addEventListener("keyup", function (e) {
-                        isKeyPressed[e.keyCode] = 0;
-                    });
-                }
-            }
-            if (typeof draw == "undefined") {
-                redraw = function () {
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                    context.globalAlpha = 1;
-                    context.fillStyle = "#FF0000";
-                    context.font = "20px Arial";
-                    context.fillText("Press <F12> for error info!", 40, 40);
-                };
-            }
-            redraw();
-            callupdate();
-        };
 
-    </script>
-</body>
+                    if (typeof mousemove != "undefined") {
+                        window.addEventListener("mousemove", mousemove);
+                    }
+                    if (typeof mouseup != "undefined") {
+                        window.addEventListener("mouseup", mouseup);
+                    }
+                    if (typeof mousedown != "undefined") {
+                        window.addEventListener("mousedown", mousedown);
+                    }
+
+                    if (typeof keydown != "undefined") {
+                        window.addEventListener("keydown", function (e) {
+                            isKeyPressed[e.keyCode] = 1;
+                            keydown(e.keyCode);
+                        });
+                    } else {
+                        window.addEventListener("keydown", function (e) {
+                            isKeyPressed[e.keyCode] = 1;
+                        });
+                    }
+                    if (typeof keyup != "undefined") {
+                        window.addEventListener("keyup", function (e) {
+                            isKeyPressed[e.keyCode] = 0;
+                            keyup(e.keyCode);
+                        });
+                    } else {
+                        window.addEventListener("keyup", function (e) {
+                            isKeyPressed[e.keyCode] = 0;
+                        });
+                    }
+                }
+                if (typeof draw == "undefined") {
+                    redraw = function () {
+                        context.clearRect(0, 0, canvas.width, canvas.height);
+                        context.globalAlpha = 1;
+                        context.fillStyle = "#FF0000";
+                        context.font = "20px Arial";
+                        context.fillText("Press <F12> for error info!", 40, 40);
+                    };
+                }
+                redraw();
+                callupdate();
+            };
+
+        </script>
+    </body>
 </html>

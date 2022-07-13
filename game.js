@@ -1,6 +1,6 @@
 endelessCanvas = true;
 let map;
-let isInEditiongMode = true;
+let isInEditiongMode = false;
 let currEditIndex = 130;
 let time = 0;
 let currEnemy;
@@ -11,7 +11,9 @@ let gameStarted = false;
 window.addEventListener("load", function() {
     addAllLevelButtons();
 
-    // let aMap = new Map(20, 20);
+    loadAudio();
+
+    // let aMap = new Map(gridSizeX, gridSizeY);
     // setMap(aMap);
 });
 
@@ -28,7 +30,8 @@ function setMap(aMap, mapToCopy){
             }
         }
     }else{
-        map.fillWithDefaultTiles(0);
+        map.fillWithDefaultTiles(130);
+        switchMenus("gameMenu", "flex");
     }
     map.drawBackgroundTiles();
     map.calculatePath();
@@ -108,15 +111,15 @@ function draw() {
         if(currTurrType != undefined){
             let indexX = Math.floor(mouseX/tileSize);
             let indexY = Math.floor(mouseY/tileSize);
-            if(indexX < map.sizeX && indexY < map.sizeY){
+            if(indexX < map.sizeX && indexY < map.sizeY && indexX >= 0 && indexY >= 0){
                 updatableContext.globalAlpha = 0.5;
-                if(map.overlapTiles[indexX][indexY].type == -1 && tilesYouCanBuildOn[map.tiles[indexX][indexY].type]){
+                if(map.overlapTiles[indexX][indexY].type == -1 && tilesYouCanBuildOn[map.tiles[indexX][indexY].type] && map.coins >= turretDisplayInfo[currTurrType].cost){
                     updatableContext.fillStyle = "lightgray";
                 }else{
                     updatableContext.fillStyle = "red";
                 }
                 updatableContext.beginPath();
-                updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, turretDisplayInfo[currTurrType].reach, 0, 2 * Math.PI, false);
+                updatableContext.arc(indexX*tileSize+tileSize/2, indexY*tileSize+tileSize/2, turretDisplayInfo[currTurrType].reachIndex * tileSize, 0, 2 * Math.PI, false);
                 updatableContext.stroke();
                 updatableContext.fillRect(indexX*tileSize, indexY*tileSize, tileSize, tileSize);
                 updatableContext.globalAlpha = 1;
@@ -133,12 +136,15 @@ function keyup(key) {
 
 function mouseup(info) {
     // console.log(info.button);
+
     let indexX = Math.floor(mouseX/tileSize);
     let indexY = Math.floor(mouseY/tileSize);
 
     if(map == undefined || !gameStarted) return;
 
-    if(indexX < map.sizeX && indexY < map.sizeY) console.log(map.tiles[indexX][indexY], map.overlapTiles[indexX][indexY]);    
+    // if(indexX < map.sizeX && indexY < map.sizeY) console.log(map.tiles[indexX][indexY], map.overlapTiles[indexX][indexY]);   
+    
+    
     // //for testing only
     // indexX = Math.floor(mouseX/cellStride);
     // indexY = Math.floor(mouseY/cellStride);
