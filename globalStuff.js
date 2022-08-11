@@ -27,3 +27,8 @@ var tilesYouCanBuildOn = {
 }
 
 var borderSize = 25;
+
+var audioVolume = {
+    "sfx": 1,
+    "music": 1,
+}

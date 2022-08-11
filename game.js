@@ -29,6 +29,7 @@ function setMap(aMap, mapToCopy){
                 map[key] = maps[0][key];
             }
         }
+        map.pathTileIndex = map.tiles[map.startIndexX][map.startIndexY].type;
     }else{
         map.fillWithDefaultTiles(130);
         switchMenus("gameMenu", "flex");
@@ -192,6 +193,8 @@ function mouseup(info) {
         }
     }else{
         // console.log(indexX, indexY, indexY*sheetLenghtX+indexX);
+        // console.log(map.tiles[indexX][indexY].type);
+        console.log(Math.floor(mouseY/cellStride)*sheetLenghtX + Math.floor(mouseX/cellStride));
         map.placeTurret(indexX, indexY, currTurrType);
     }
 };

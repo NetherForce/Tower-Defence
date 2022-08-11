@@ -93,6 +93,17 @@ class Enemy{
         this.secondImaeOffsetY = 0;
         this.timeToSpawn = 50;
         this.isDead = false;
+
+        this.walkAudioArray = [];
+    }
+    loadAudioArray(){
+        //loads audio array
+        let audioNamesArray = tileIdToStepSound[map.pathTileIndex];
+        for(let i in audioNamesArray){
+            let currAudioName = audioNamesArray[i];
+
+            if(audioElement[currAudioName] != undefined) this.walkAudioArray.push(audioElement[currAudioName].cloneNode(true));
+        }
     }
     setByType(type){
         this.type = type;
@@ -100,6 +111,8 @@ class Enemy{
         for(let key in type){
             this[key] = type[key];
         }
+
+        this.loadAudioArray();
     }
     drawSelf(){
         drawRotadedImage(this.imageIndex, this.centerX, this.centerY, this.angle);
@@ -204,6 +217,13 @@ class Enemy{
                 this.calculateDirection();
             }
         }
+
+        // let audioArray = tileIdToStepSound[map.pathTileIndex];
+        // let audioToPlayName = audioArray[Math.floor(Math.random()*audioArray.length)];
+        // console.log(audioToPlayName);
+        // copyAudioAndPlay(audioToPlayName);
+
+        playAudioFromElement(this.walkAudioArray[Math.floor(Math.random() * this.walkAudioArray.length)]);
     }
     spawn(){
         if(this.path != undefined){

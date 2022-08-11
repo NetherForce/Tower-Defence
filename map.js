@@ -21,13 +21,15 @@ class Map{
         this.endIndexY;
         this.path;
         this.enemies = {};
-        this.enemiesToSpawn = [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.enemiesToSpawn = [[0, 10]]; //keeps track of the enemy types it needs to spawn and the number of them
         this.turrets = {};
         this.bullets = {};
         this.idCount = 0;
         this.globalHealth = 100;
 
         this.coins = 1000;
+
+        this.pathTileIndex = 93;
     }
     fillWithDefaultTiles(defaultTileID){
         this.tiles = [];

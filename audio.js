@@ -1,6 +1,6 @@
 let audioElement = {}; // audio name to audio element
 let isAudioPlayable = {}; // audio name to bool that tells weather the audio can be played
-let audioSrc = {"./assets/audio/25-CC0-bang-sfx/bang_01.ogg": "sfx",
+const audioSrc = {"./assets/audio/25-CC0-bang-sfx/bang_01.ogg": "sfx",
                 "./assets/audio/25-CC0-bang-sfx/bang_02.ogg": "sfx",
                 "./assets/audio/25-CC0-bang-sfx/bang_03.ogg": "sfx",
                 "./assets/audio/25-CC0-bang-sfx/bang_04.ogg": "sfx",
@@ -60,10 +60,10 @@ let audioSrc = {"./assets/audio/25-CC0-bang-sfx/bang_01.ogg": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/hit3.wav": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/hop.wav": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/jump.wav": "sfx",
-                "./assets/audio/Game_SFX_by_OwlishMedia/lazer.wav": "sfx",
-                "./assets/audio/Game_SFX_by_OwlishMedia/hilazer2t1.wav": "sfx",
-                "./assets/audio/Game_SFX_by_OwlishMedia/lazer3.wav": "sfx",
-                "./assets/audio/Game_SFX_by_OwlishMedia/lazer4.wav": "sfx",
+                // "./assets/audio/Game_SFX_by_OwlishMedia/lazer.wav": "sfx",
+                // "./assets/audio/Game_SFX_by_OwlishMedia/lazer2.wav": "sfx",
+                // "./assets/audio/Game_SFX_by_OwlishMedia/lazer3.wav": "sfx",
+                // "./assets/audio/Game_SFX_by_OwlishMedia/lazer4.wav": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/move.wav": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/oceanwave1.wav": "sfx",
                 "./assets/audio/Game_SFX_by_OwlishMedia/oceanwave2.wav": "sfx",
@@ -124,13 +124,35 @@ let audioSrc = {"./assets/audio/25-CC0-bang-sfx/bang_01.ogg": "sfx",
                 "./assets/audio/[kdd]DifferentSteps/wood02.ogg": "sfx",
                 "./assets/audio/[kdd]DifferentSteps/wood03.ogg": "sfx",
                 }; // an array of all audio sources that need to be loaded and their group
-let audiToPlayOnLoad = {
+const audiToPlayOnLoad = {
                         // "bang_02": true,
                         }; // ann objects with keys, that are the name of the audio that needs to be played when loaded
-let audioGroups = {
+const audioGroups = {
     "sfx": {},
     "music": {},
 };
+
+const tileIdToStepSound = {
+    93: ["mud02"],
+    158: ["mud02"],
+    167: ["mud02"],
+    236: ["mud02"],
+
+    34: ["gravel", "stone01"],
+    103: ["gravel", "stone01"],
+    159: ["gravel", "stone01"],
+    172: ["gravel", "stone01"],
+    
+    29: ["Fantozzi-SandL1", "Fantozzi-SandL2", "Fantozzi-SandL3", "Fantozzi-SandR1", "Fantozzi-SandR2", "Fantozzi-SandR3"],
+    98: ["Fantozzi-SandL1", "Fantozzi-SandL2", "Fantozzi-SandL3", "Fantozzi-SandR1", "Fantozzi-SandR2", "Fantozzi-SandR3"],
+    160: ["Fantozzi-SandL1", "Fantozzi-SandL2", "Fantozzi-SandL3", "Fantozzi-SandR1", "Fantozzi-SandR2", "Fantozzi-SandR3"],
+    241: ["Fantozzi-SandL1", "Fantozzi-SandL2", "Fantozzi-SandL3", "Fantozzi-SandR1", "Fantozzi-SandR2", "Fantozzi-SandR3"],
+    
+    24: ["leaves01", "leaves02"],
+    157: ["leaves01", "leaves02"],
+    162: ["leaves01", "leaves02"],
+    231: ["leaves01", "leaves02"],
+}
 
 function loadAudio(){
     for(let src in audioSrc){
@@ -148,7 +170,7 @@ function loadAudio(){
 
             isAudioPlayable[audioName] = true;
 
-            console.log("audio " + audioName + " is ready to be played");
+            // console.log("audio " + audioName + " is ready to be played");
 
             if(audiToPlayOnLoad[audioName] != undefined){
                 playAudio(audioName);
@@ -189,4 +211,22 @@ function setAudioGroupVolume(groupName, newVolume){
     for(let audioName in audioGroups[groupName]){
         setAudioVolume(audioName, newVolume);
     }
+}
+
+function playAudioFromElement(audioElement){
+    if(audioElement.readyState < 3) return; //makes sure there is enough information to play the audio
+    // if(!audioElement.canPlayType()) return; //makes sure the browser can play the audio element
+    if(audioElement.error != null){
+        //if there is an error with the audio
+        audioElement.load(); //reloading the audio
+        return;
+    }
+    if(!audioElement.paused) return; //makes sure we are not playing the audio while it is playing
+
+
+    audioElement.volume = audioVolume["sfx"];
+
+    console.log("Audio is playing", audioElement);
+
+    audioElement.play();
 }
