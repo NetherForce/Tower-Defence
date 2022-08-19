@@ -21,7 +21,7 @@ class Map{
         this.endIndexY;
         this.path;
         this.enemies = {};
-        this.enemiesToSpawn = [[0, 10]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.enemiesToSpawn = [[0, 10], [5, 5]]; //keeps track of the enemy types it needs to spawn and the number of them
         this.turrets = {};
         this.bullets = {};
         this.idCount = 0;
@@ -30,6 +30,10 @@ class Map{
         this.coins = 1000;
 
         this.pathTileIndex = 93;
+
+        this.numberOfTanks = 0; //keeps track on the number of tanks on the map
+        //is used to regulate the volume of tank movement sound
+        this.tankMoveAudio;
     }
     fillWithDefaultTiles(defaultTileID){
         this.tiles = [];
@@ -38,8 +42,18 @@ class Map{
             this.tiles[i] = [];
             this.overlapTiles[i] = [];
             for(let j = 0; j < this.sizeY; j++){
-                this.tiles[i][j] = defaultTileID;
-                this.overlapTiles[i][j] = -1;
+                this.tiles[i][j] = {
+                    "type": defaultTileID,
+                    "indexX": i,
+                    "indexY": j,
+                    "canBeBuildOn": true,
+                };
+                this.overlapTiles[i][j] = {
+                    "type": -1,
+                    "indexX": i,
+                    "indexY": j,
+                    "canBeBuildOn": true,
+                };
             }
         }
     }
@@ -68,10 +82,10 @@ class Map{
                 // console.log(i, j, this.tiles);
                 // console.log(this.tiles[i][j].type, this.offsetX, this.offsetY);
                 tileFunctions.draw(this.tiles[i][j].type, i, j, this.offsetX, this.offsetY);
-                tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
+                if(this.overlapTiles[i][j].type != -1) tileFunctions.draw(this.overlapTiles[i][j].type, i, j, this.offsetX, this.offsetY);
             }
         }
-        // this.drawCanvasOutline();
+        // if(isInEditiongMode) this.drawCanvasOutline();
     }
     calculateNextPathIndex(currIndexX, currIndexY, pastIndexX, pastIndexY){
         //currIndexX, currIndexY - indexes of the tiles we want to continue the path from
@@ -126,6 +140,10 @@ class Map{
             this.idCount++;
             this.enemies[newEnemy.id] = newEnemy;
         }
+        if((this.enemies[this.idCount-1].type == 4 || this.enemies[this.idCount-1].type == 5) && this.numberOfTanks < 10){
+            this.numberOfTanks++;
+            this.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
+        }
     }
     removeEnemy(enemyId, reachedEnd){
         if(reachedEnd){
@@ -134,6 +152,10 @@ class Map{
         }else{
             this.coins += enemyTypes[this.enemies[enemyId].type].rewardedCoins;
             updateCoinStat(this.coins);
+        }
+        if((this.enemies[enemyId].type == 4 || this.enemies[enemyId].type == 5) && this.numberOfTanks > 0){
+            this.numberOfTanks--;
+            this.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
         }
         delete this.enemies[enemyId];
     }

@@ -11,7 +11,23 @@ let distBetweenCanvasTiles = 2; //in pixels
 let tileCanvas;
 
 let floorTiles = {
-    93: true
+    24: true,
+    29: true,
+    34: true,
+    93: true,
+    98: true,
+    103: true,
+    157: true,
+    158: true,
+    159: true,
+    160: true,
+    162: true,
+    167: true,
+    172: true,
+    231: true,
+    236: true,
+    241: true,
+
 };
 
 function idToIndex(theId){

@@ -42,12 +42,41 @@
                         <div id="healthStat">1000HP</div>
                         <div id="coinStat">1000C</div>
                     </div>
+                    <div id="additionalButtonHolder">
+                        <button id="settingsButton" onclick='showPauseMenu()'>
+                            <div id="settingsButtonImage"></div>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div id="canvasHolder">
                 <canvas id="updatable-canvas"></canvas>
                 <canvas id="canvas-id" class="grassDirt"></canvas>
                 <canvas id="tilesheetCanvas" style="display: none;"></canvas>
+            </div>
+
+            <div id="pauseMenuHolder" class="blurredBackground" style="display: none;">
+                <div id="pauseMenu" class="grassDirt">
+                    <div id="pauseMenuButtonHolder">
+                        <button class="sandStone" onclick="showPauseMenuSettings()">Settings</button>
+                        <button class="sandStone" onclick="hidePauseMenu()">Resume</button>
+                    </div>
+                    <div id="pauseMenuSettings" style="display: none;">
+                        <!-- two inputs -->
+
+                        <div id="musicVolumeHolder" class="sliderHolder">
+                            <div id="musicVolumeText" class="sliderText">Music volume:</div>
+                            <div id="musicVolumeSlider" class="sliderSlider"><input type="range" min="0" max="100" value="100" class="slider" onchange='onVolumeChange("music", this.value)'></div>
+                        </div>
+                        
+                        <div id="sfxVolumeHolder" class="sliderHolder">
+                            <div id="sfxVolumeText" class="sliderText">SFX volume:</div>
+                            <div id="sfxVolumeSlider" class="sliderSlider"><input type="range" min="0" max="100" value="100" class="slider" onchange='onVolumeChange("sfx", this.value)'></div>
+                        </div>
+
+                        <button class="sandStone" onclick="hidePauseMenuSettings()">Back</button>
+                    </div>
+                </div>
             </div>
         </div>
 

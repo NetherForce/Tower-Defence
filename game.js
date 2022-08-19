@@ -4,7 +4,7 @@ let isInEditiongMode = false;
 let currEditIndex = 130;
 let time = 0;
 let currEnemy;
-let currTurrType = 4;
+let currTurrType = 0;
 let gameStoped = false;
 let gameStarted = false;
 
@@ -31,11 +31,16 @@ function setMap(aMap, mapToCopy){
         }
         map.pathTileIndex = map.tiles[map.startIndexX][map.startIndexY].type;
     }else{
-        map.fillWithDefaultTiles(130);
+        map.fillWithDefaultTiles(50);
         switchMenus("gameMenu", "flex");
     }
     map.drawBackgroundTiles();
     map.calculatePath();
+
+    map.tankMoveAudio = audioElement["Small_Tracks_Rattle_Slow"];
+    map.tankMoveAudio.loop = true;
+    map.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
+    map.tankMoveAudio.play();
 
     gameStarted = true;
 
@@ -47,7 +52,7 @@ function setMap(aMap, mapToCopy){
 }
 
 function update() {
-    if(gameStoped || !gameStarted) return;
+    if(gameStoped || !gameStarted || isInEditiongMode) return;
     time++;
     if(map){
         for(let i in map.enemies){
@@ -109,7 +114,7 @@ function draw() {
             theBullet.drawSelf();
         }
 
-        if(currTurrType != undefined){
+        if(currTurrType != undefined && !gameStoped){
             let indexX = Math.floor(mouseX/tileSize);
             let indexY = Math.floor(mouseY/tileSize);
             if(indexX < map.sizeX && indexY < map.sizeY && indexX >= 0 && indexY >= 0){
@@ -132,7 +137,14 @@ function draw() {
 };
 
 function keyup(key) {
-    
+    if(key == 27){
+        //close|open pause menu 
+        if(document.getElementById("pauseMenuHolder").style.display=="none"){
+            showPauseMenu();
+        }else{
+            hidePauseMenu();
+        }
+    }
 };
 
 function mouseup(info) {
@@ -141,7 +153,7 @@ function mouseup(info) {
     let indexX = Math.floor(mouseX/tileSize);
     let indexY = Math.floor(mouseY/tileSize);
 
-    if(map == undefined || !gameStarted) return;
+    if(map == undefined || !gameStarted || gameStoped) return;
 
     // if(indexX < map.sizeX && indexY < map.sizeY) console.log(map.tiles[indexX][indexY], map.overlapTiles[indexX][indexY]);   
     
@@ -157,9 +169,10 @@ function mouseup(info) {
     // return;
 
     if(isInEditiongMode){
-        if(indexX < map.sizeX && indexY < map.sizeY){
+        console.log(currEditIndex);
+        if(indexX < map.sizeX && indexY < map.sizeY && indexX >= 0 && indexY >= 0){
             if(info.button == 0){
-                // console.log(indexX, indexY, currEditIndex);
+                console.log(indexX, indexY, currEditIndex);
                 map.tiles[indexX][indexY].type = currEditIndex;
                 tileFunctions.redraw(map.tiles[indexX][indexY].type, indexX, indexY, map.offsetX, map.offsetY);
                 if(map.overlapTiles[indexX][indexY].type != -1) tileFunctions.draw(map.overlapTiles[indexX][indexY].type, indexX, indexY, map.offsetX, map.offsetY);
@@ -194,7 +207,7 @@ function mouseup(info) {
     }else{
         // console.log(indexX, indexY, indexY*sheetLenghtX+indexX);
         // console.log(map.tiles[indexX][indexY].type);
-        console.log(Math.floor(mouseY/cellStride)*sheetLenghtX + Math.floor(mouseX/cellStride));
+        // console.log(Math.floor(mouseY/cellStride)*sheetLenghtX + Math.floor(mouseX/cellStride));
         map.placeTurret(indexX, indexY, currTurrType);
     }
 };

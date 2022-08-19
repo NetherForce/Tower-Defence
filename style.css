@@ -105,6 +105,45 @@ html{
     border-image: url('assets/PNG/Default size/towerDefense_tile257.png') 33% round !important;
 }
 
+.blurredBackground{
+    backdrop-filter: blur(5px);
+}
+
+/* slider css */
+.sliderHolder{
+    display:flex;
+}
+.sliderText{
+    display: inline-block;
+    float: left;
+    width: 30%;
+}
+
+.sliderSlider{
+    width: 100%;
+    float: left;
+    display: inline-block;
+}
+
+.slider {
+    width: 100%;
+    outline: none;
+    display: inline-block;
+    float: left;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    cursor: pointer;
+}
+
 /* main menu css */
 #mainMenu{
     position:fixed;
@@ -270,7 +309,7 @@ html{
 }
 #statHolder{
     box-sizing: border-box;
-    width: 50%;
+    width: 30%;
     height: 100%;
     padding-left: 1rem;
     vertical-align: center;
@@ -339,6 +378,25 @@ html{
     color: black;
 }
 
+#additionalButtonHolder{
+    width: 20%;
+}
+
+#additionalButtonHolder #settingsButton{
+    background-color: lightgray;
+    border: none;
+    padding: 0rem;
+    box-sizing: border-box;
+}
+
+#additionalButtonHolder #settingsButtonImage{
+    width:32px;
+    height:32px;
+    background-image: url('assets/Tilesheet/towerDefense_tilesheet@2.png');
+    background-position: -512px -96px;
+    background-size: 736px 416px;
+}
+
 #canvasHolder{
     flex-grow: 1;
     flex-shrink: 1;
@@ -358,4 +416,34 @@ html{
     left: 0rem;
     top: 0rem;
     z-index: 5;
+}
+
+#gameMenu #pauseMenuHolder{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+}
+
+#gameMenu #pauseMenu{
+    box-sizing: border-box;
+    width: 30%;
+    height: 40%;
+    margin: 15% 35% 45% 35%;
+    text-align: center;
+}
+
+#gameMenu #pauseMenu button{
+    width: 60%;
+    margin-bottom: 0.5rem;
+}
+
+#gameMenu #pauseMenu #pauseMenuButtonHolder{
+    width: 100%;
+    height: 100%;
+}
+
+#gameMenu #pauseMenu #pauseMenuSettings{
+    width: 100%;
+    height: 100%;
 }

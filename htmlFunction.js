@@ -83,7 +83,7 @@ function addAllLevelButtons(){
 }
 
 function onLevelButtonClick(level){
-    level = returnOnlyNumbersFromString(level);
+    level = returnOnlyNumbersFromString(level)-1;
     
     let aMap = new Map(gridSizeX, gridSizeY);
     if(levelButtonsInfo[level] != undefined && levelButtonsInfo[level].map != undefined){
@@ -128,4 +128,37 @@ function updateHealthStat(hp){
 
 function updateCoinStat(coins){
     document.getElementById("coinStat").innerHTML = coins + "C";
+}
+
+function showPauseMenu(){
+    document.getElementById("pauseMenuHolder").style.display="inline-block";
+    gameStoped = true;
+    hidePauseMenuSettings();
+    if(map != undefined && map.tankMoveAudio != undefined) map.tankMoveAudio.pause();
+}
+
+function hidePauseMenu(){
+    document.getElementById("pauseMenuHolder").style.display="none";
+    gameStoped = false;
+    if(map.tankMoveAudio != undefined) map.tankMoveAudio.play();
+}
+
+function showPauseMenuSettings(){
+    document.getElementById("pauseMenuButtonHolder").style.display="none";
+    document.getElementById("pauseMenuSettings").style.display="inline-block";
+}
+
+function hidePauseMenuSettings(){
+    document.getElementById("pauseMenuButtonHolder").style.display="inline-block";
+    document.getElementById("pauseMenuSettings").style.display="none";
+}
+
+function onVolumeChange(groupName, newVolume){
+    audioVolume[groupName] = newVolume/100;
+    if(groupName = "sfx" && map.tankMoveAudio != undefined){
+        map.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
+    }
+    //save in local storage
+
+    // setAudioGroupVolume(groupName, newVolume/100);
 }

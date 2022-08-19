@@ -9,21 +9,18 @@ var gridSizeX = 20;
 var gridSizeY = 20;
 
 var tilesYouCanBuildOn = {
-    48: true,
-    53: true,
-    58: true,
-    114: true,
+    50: true,
+    55: true,
+    60: true,
     119: true,
     124: true,
-    180: true,
-    185: true,
-    190: true,
-    246: true,
-    251: true,
-    256: true,
-    151: true,
-    152: true,
-    153: true,
+    129: true,
+    188: true,
+    193: true,
+    198: true,
+    257: true,
+    262: true,
+    267: true,
 }
 
 var borderSize = 25;

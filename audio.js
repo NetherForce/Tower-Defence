@@ -123,6 +123,8 @@ const audioSrc = {"./assets/audio/25-CC0-bang-sfx/bang_01.ogg": "sfx",
                 "./assets/audio/[kdd]DifferentSteps/wood01.ogg": "sfx",
                 "./assets/audio/[kdd]DifferentSteps/wood02.ogg": "sfx",
                 "./assets/audio/[kdd]DifferentSteps/wood03.ogg": "sfx",
+
+                "./assets/audio/moving_tank/Small_Tracks_Rattle_Slow.mp3": "sfx",
                 }; // an array of all audio sources that need to be loaded and their group
 const audiToPlayOnLoad = {
                         // "bang_02": true,
@@ -158,6 +160,7 @@ function loadAudio(){
     for(let src in audioSrc){
         let newAudio = new Audio();
         newAudio.src = src;
+        newAudio.groupName = audioSrc[src];
         let audioName = getNameOfDocumentFromSource(src);
         audioElement[audioName] = newAudio;
         isAudioPlayable[audioName] = false;
@@ -184,6 +187,7 @@ function playAudio(audioName){
     if(audioElement[audioName] == undefined) return;
     if(!isAudioPlayable[audioName]) return;
 
+    audioElement[audioName].volume = audioVolume[audioElement[audioName].groupName];
     audioElement[audioName].play();
 }
 
@@ -192,9 +196,8 @@ function copyAudioAndPlay(audioName){
     if(audioElement[audioName] == undefined) return;
     if(!isAudioPlayable[audioName]) return;
 
-    console.log("played audio");
-
     let newAudioElement = audioElement[audioName].cloneNode(true);
+    newAudioElement.volume = audioVolume[audioElement[audioName].groupName];
     newAudioElement.play();
 }
 
@@ -208,9 +211,17 @@ function setAudioVolume(audioName, newVolume){
 function setAudioGroupVolume(groupName, newVolume){
     if(audioGroups[groupName] == undefined) return;
 
+    if(newVolume < 0) newVolume = 0;
+    if(newVolume > 1) newVolume = 1;
+
+    audioVolume[groupName] = newVolume;
+
+
     for(let audioName in audioGroups[groupName]){
         setAudioVolume(audioName, newVolume);
     }
+
+    console.log("Changed volume", groupName, newVolume);
 }
 
 function playAudioFromElement(audioElement){
@@ -226,7 +237,7 @@ function playAudioFromElement(audioElement){
 
     audioElement.volume = audioVolume["sfx"];
 
-    console.log("Audio is playing", audioElement);
+    // console.log("Audio is playing", audioElement);
 
     audioElement.play();
 }
