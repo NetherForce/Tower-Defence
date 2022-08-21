@@ -14,9 +14,12 @@ function addEditToolButton(indexX, indexY){
 }
 
 function switchMenus(menuId, newDisplay){
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("levelChoose").style.display = "none";
+    console.log("aaaaaaaaaaaaaaaaaa");
+    document.getElementById("mainMenu").style.display = "none"; //default flex
+    document.getElementById("levelChoose").style.display = "none"; //default flex
     document.getElementById("gameMenu").style.display = "none";
+        document.getElementById("pauseMenuHolder").style.display="none";
+        document.getElementById("pauseMenuSettings").style.display="none";
 
     document.getElementById(menuId).style.display = newDisplay;
 }
@@ -161,4 +164,14 @@ function onVolumeChange(groupName, newVolume){
     //save in local storage
 
     // setAudioGroupVolume(groupName, newVolume/100);
+}
+
+function fromGameToMainMenu(){
+    map = null;
+    gameStoped = false;
+    gameStarted = false;
+    time = 0;
+    currEnemy = null;
+    currTurrType = 0;
+    switchMenus("levelChoose", "flex");
 }

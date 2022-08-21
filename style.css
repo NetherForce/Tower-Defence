@@ -428,14 +428,20 @@ html{
 #gameMenu #pauseMenu{
     box-sizing: border-box;
     width: 30%;
-    height: 40%;
-    margin: 15% 35% 45% 35%;
+    height: min-content;
+    margin-top: 15%;
+    margin-left: 35%;
+    margin-right: 35%;
     text-align: center;
 }
 
 #gameMenu #pauseMenu button{
     width: 60%;
     margin-bottom: 0.5rem;
+}
+
+#gameMenu #pauseMenu button:last-of-type{
+    margin-bottom: 0rem !important;
 }
 
 #gameMenu #pauseMenu #pauseMenuButtonHolder{

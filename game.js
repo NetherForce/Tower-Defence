@@ -22,11 +22,11 @@ function setMap(aMap, mapToCopy){
     if(!isInEditiongMode){
         if(maps[mapToCopy] != undefined){
             for(let key in maps[mapToCopy]){
-                map[key] = maps[mapToCopy][key];
+                map[key] = JSON.parse(JSON.stringify(maps[mapToCopy][key]));
             }
         }else{
             for(let key in maps[0]){
-                map[key] = maps[0][key];
+                map[key] = JSON.parse(JSON.stringify(maps[0][key]));
             }
         }
         map.pathTileIndex = map.tiles[map.startIndexX][map.startIndexY].type;
