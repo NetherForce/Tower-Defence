@@ -14,7 +14,6 @@ function addEditToolButton(indexX, indexY){
 }
 
 function switchMenus(menuId, newDisplay){
-    console.log("aaaaaaaaaaaaaaaaaa");
     document.getElementById("mainMenu").style.display = "none"; //default flex
     document.getElementById("levelChoose").style.display = "none"; //default flex
     document.getElementById("gameMenu").style.display = "none";
@@ -38,13 +37,13 @@ let levelButtonsInfo = {
     },
     2: {
         level: 2,
-        map: 1,
-        buttonStyle: "sandDirt"
+        map: 2,
+        buttonStyle: "dirtStone"
     },
     3: {
         level: 3,
         map: 3,
-        buttonStyle: "stoneDirt"
+        buttonStyle: "grassSand"
     },
     4: {
         level: 4,
@@ -56,6 +55,64 @@ let levelButtonsInfo = {
         map: 5,
         buttonStyle: "sandGrass"
     },
+}
+
+let classNamePairs = {
+    "grassDirt": "sandStone",
+    "sandDirt": "grassStone",
+    "stoneDirt": "grassSand",
+    "dirtGrass": "stoneSand",
+    "sandGrass": "dirtStone",
+    "stoneGrass": "sandDirt",
+    "grassSand": "stoneDirt",
+    "dirtSand": "stoneGrass",
+    "stoneSand": "dirtGrass",
+    "grassStone": "dirtSand",
+    "dirtStone": "sandGrass",
+    "sandStone": "grassDirt",
+}
+
+function removeAndSetClassOnElement(theElement, elementId, classNameToAdd){
+    if(theElement == null) theElement = document.getElementById(elementId);
+
+    // console.log(theElement, "---", elementId, "---", classNameToAdd);
+
+    theElement.classList.remove("grassDirt");
+    theElement.classList.remove("sandDirt");
+    theElement.classList.remove("stoneDirt");
+    theElement.classList.remove("dirtGrass");
+    theElement.classList.remove("sandGrass");
+    theElement.classList.remove("stoneGrass");
+    theElement.classList.remove("grassSand");
+    theElement.classList.remove("dirtSand");
+    theElement.classList.remove("stoneSand");
+    theElement.classList.remove("grassStone");
+    theElement.classList.remove("dirtStone");
+    theElement.classList.remove("sandStone");
+
+    theElement.classList.add(classNameToAdd);
+}
+
+function setClassStyleOnMapLoad(className){
+    let secondaryClassName = classNamePairs[className];
+
+    removeAndSetClassOnElement(null, "canvas-id", className);
+
+    removeAndSetClassOnElement(null, "pauseMenu", className);
+
+    let pauseMenuButtons = document.getElementById("pauseMenuButtonHolder").querySelectorAll("button");
+    for(let index in pauseMenuButtons){
+        let theButton = pauseMenuButtons[index];
+
+        if(isElement(theButton)) removeAndSetClassOnElement(theButton, "", secondaryClassName);
+    }
+
+    let pauseMenuSettingsButtons = document.getElementById("pauseMenuSettings").querySelectorAll("button");
+    for(let index in pauseMenuSettingsButtons){
+        let theButton = pauseMenuSettingsButtons[index];
+
+        if(isElement(theButton)) removeAndSetClassOnElement(theButton, "", secondaryClassName);
+    }
 }
 
 function levelChooseAddButton(level){
@@ -95,6 +152,8 @@ function onLevelButtonClick(level){
         setMap(aMap, 0);
     }
 
+    setClassStyleOnMapLoad(levelButtonsInfo[level+1].buttonStyle);
+
     switchMenus("gameMenu", "flex");
 }
 
@@ -115,14 +174,6 @@ function addGameToolButton(type, imageIndex, price){
     elementCopy.querySelector(".gameButtonPriceDisplayer").innerHTML = price + "C";
 
     document.getElementById("gameToolHolder").appendChild(elementCopy);
-}
-
-function switchMenus(menuId, newDisplay){
-    document.getElementById("mainMenu").style.display = "none";
-    document.getElementById("levelChoose").style.display = "none";
-    document.getElementById("gameMenu").style.display = "none";
-
-    document.getElementById(menuId).style.display = newDisplay;
 }
 
 function updateHealthStat(hp){

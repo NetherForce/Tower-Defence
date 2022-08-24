@@ -31,7 +31,7 @@ function setMap(aMap, mapToCopy){
         }
         map.pathTileIndex = map.tiles[map.startIndexX][map.startIndexY].type;
     }else{
-        map.fillWithDefaultTiles(50);
+        map.fillWithDefaultTiles(124);
         switchMenus("gameMenu", "flex");
     }
     map.drawBackgroundTiles();

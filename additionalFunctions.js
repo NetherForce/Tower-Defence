@@ -63,3 +63,7 @@ function returnOnlyNumbersFromString(string){
 function getNameOfDocumentFromSource(src){
     return src.match(/[^\/]+(?=\.[^\/.]*$)/, "")[0];
 }
+
+function isElement(element) {
+    return element instanceof Element || element instanceof HTMLDocument;  
+}

@@ -34,6 +34,8 @@ class Map{
         this.numberOfTanks = 0; //keeps track on the number of tanks on the map
         //is used to regulate the volume of tank movement sound
         this.tankMoveAudio;
+
+        this.startingEnemyAngle;
     }
     fillWithDefaultTiles(defaultTileID){
         this.tiles = [];
@@ -127,6 +129,13 @@ class Map{
     }
     calculatePath(){
         this.path = this.calculateNextPathIndex(this.startIndexX, this.startIndexY, -1, -1);
+
+        //calculate starting enemy angle
+        let pX1 = this.path.indexX * tileSize;
+        let pY1 = this.path.indexY * tileSize;
+        let pX2 = this.path.next.indexX * tileSize;
+        let pY2 = this.path.next.indexY * tileSize;
+        this.startingEnemyAngle = Math.atan2(pY1 - pY2, pX1 - pX2);
     }
     addEnemy(type, enemy=null){
         if(enemy != null){
@@ -140,6 +149,7 @@ class Map{
             this.idCount++;
             this.enemies[newEnemy.id] = newEnemy;
         }
+        this.enemies[this.idCount-1].angle = this.startingEnemyAngle;
         if((this.enemies[this.idCount-1].type == 4 || this.enemies[this.idCount-1].type == 5) && this.numberOfTanks < 10){
             this.numberOfTanks++;
             this.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
