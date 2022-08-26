@@ -21,7 +21,7 @@ class Map{
         this.endIndexY;
         this.path;
         this.enemies = {};
-        this.enemiesToSpawn = [[0, 10], [5, 5]]; //keeps track of the enemy types it needs to spawn and the number of them
+        this.enemiesToSpawn = [[-1, 5], [0, 10], [5, 5]]; //keeps track of the enemy types it needs to spawn and the number of them
         this.turrets = {};
         this.bullets = {};
         this.idCount = 0;
@@ -36,6 +36,9 @@ class Map{
         this.tankMoveAudio;
 
         this.startingEnemyAngle;
+
+        this.endlessMode = false;
+        this.endlessModeProgression = 0;
     }
     fillWithDefaultTiles(defaultTileID){
         this.tiles = [];
@@ -156,6 +159,7 @@ class Map{
         }
     }
     removeEnemy(enemyId, reachedEnd){
+        this.enemies[enemyId].isDead = true;
         if(reachedEnd){
             this.globalHealth -= this.enemies[enemyId].dmg;
             updateHealthStat(this.globalHealth);
@@ -168,6 +172,13 @@ class Map{
             this.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
         }
         delete this.enemies[enemyId];
+
+        if(this.globalHealth <= 0){
+            console.log("GAME LOST!!!");
+        }
+        if(isObjectEmpty(this.enemies) && this.enemiesToSpawn.length == 0){
+            console.log("GAME WON!!!");
+        }
     }
     placeTurret(indexX, indexY, type){
         if(this.coins < turretDisplayInfo[type].cost) return;
@@ -226,5 +237,19 @@ class Map{
             this.enemies[i].centerX = this.enemies[i].centerX/oldSize * newSize;
             this.enemies[i].centerY = this.enemies[i].centerY/oldSize * newSize;
         }
+    }
+    addEnemiesForEndlessMode(){
+        let enemyType = this.endlessModeProgression%6;
+        let enemyNumber;
+
+        if(enemyType != 4 && enemyType != 5){
+            enemyNumber = (this.endlessModeProgression+1) * 5;
+        }else{
+            enemyNumber = Math.floor(this.endlessModeProgression/5 + 1) * 5;
+        }
+
+        this.enemiesToSpawn.push([-1, 5]);
+        this.enemiesToSpawn.push([enemyType, enemyNumber]);
+        this.endlessModeProgression++;
     }
 }

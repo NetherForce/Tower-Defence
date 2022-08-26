@@ -14,9 +14,25 @@
         </div>
 
         <div id="levelChoose" style="display: none;">
-            <div id="buttonHolder" class="sandStone">
-                <button id="buttonToClone" class="sandStone" style="display: none;" onclick="onLevelButtonClick(this.id)">
-                    <p>1</p>
+            <div id="buttonContainer">
+                <div id="buttonHolder" class="sandStone">
+                    <div id="levelChooseButonHolder">
+                        <button id="buttonToClone" class="sandStone" style="display: none;" onclick="onLevelButtonClick(this.id)">
+                            <p>1</p>
+                            <div class="buttonPointer"></div>
+                        </button>
+                    </div>
+
+                    <div id="endlessModeButtonHolder">
+                        <button id="endlessModeButton" class="grassDirt" onclick="startEndlessMode()">Endless Mode
+                            <div class="buttonPointer"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="levelChooseToolHolder">
+                <button id="LevelChooseBackButton" class="sandStone" onclick="switchMenus('mainMenu', 'flex')">Back
                     <div class="buttonPointer"></div>
                 </button>
             </div>

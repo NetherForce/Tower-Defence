@@ -2,16 +2,7 @@ var maps = {
     0: {
         "sizeX": 20,
         "sizeY": 20,
-        "enemiesToSpawn": [
-            [
-                0,
-                10
-            ],
-            [
-                5,
-                5
-            ]
-        ],
+        "enemiesToSpawn": [[-1, 5], [0, 10], [5, 5]],
         "tiles": [
             [
                 {

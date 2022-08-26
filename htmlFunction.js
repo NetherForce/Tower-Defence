@@ -133,7 +133,7 @@ function levelChooseAddButton(level){
         clonedDiv.classList.add("grassDirt");
     }
 
-    document.getElementById("levelChoose").querySelector("#buttonHolder").appendChild(clonedDiv);
+    document.getElementById("levelChoose").querySelector("#levelChooseButonHolder").appendChild(clonedDiv);
 }
 
 function addAllLevelButtons(){
@@ -225,4 +225,16 @@ function fromGameToMainMenu(){
     currEnemy = null;
     currTurrType = 0;
     switchMenus("levelChoose", "flex");
+}
+
+function startEndlessMode(){
+    let aMap = new Map(gridSizeX, gridSizeY);
+    setMap(aMap, 0);
+    map.endlessMode = true;
+    map.enemiesToSpawn = [];
+    map.addEnemiesForEndlessMode();
+
+    setClassStyleOnMapLoad(levelButtonsInfo[1].buttonStyle);
+
+    switchMenus("gameMenu", "flex");
 }

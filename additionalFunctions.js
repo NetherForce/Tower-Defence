@@ -67,3 +67,7 @@ function getNameOfDocumentFromSource(src){
 function isElement(element) {
     return element instanceof Element || element instanceof HTMLDocument;  
 }
+
+function isObjectEmpty(obj){
+    return (Object.keys(obj).length === 0);
+}

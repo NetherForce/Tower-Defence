@@ -216,6 +216,7 @@ class BigRocketTurred extends Turret{
         this.bulletType = 9;
         this.fireRate = 50;
         this.possibleTargets = {4: true, 5: true};
+        this.reload();
     }
     calculateAngle(){
         if(this.target != null){
@@ -242,6 +243,7 @@ class BigRocketTurred extends Turret{
         if(this.target != null){
             if(this.target.isDead){
                 this.findTarget();
+                this.reload();
                 return;
             }
             this.calculateAngle();
@@ -255,6 +257,7 @@ class BigRocketTurred extends Turret{
             }
         }else{
             this.findTarget();
+            this.reload();
         }
     }
 }

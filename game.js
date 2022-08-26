@@ -71,11 +71,22 @@ function update() {
 
         if(!currEnemy){
             if(map.enemiesToSpawn[0] != undefined){
-                currEnemy = new Enemy(map.enemies.length, map.path);
-                currEnemy.setByType(map.enemiesToSpawn[0][0]);
-                map.enemiesToSpawn[0][1]--;
-                if(map.enemiesToSpawn[0][1] <= 0){
-                    map.enemiesToSpawn.splice(0);
+                if(map.enemiesToSpawn[0][0] != -1){
+                    currEnemy = new Enemy(map.enemies.length, map.path);
+                    currEnemy.setByType(map.enemiesToSpawn[0][0]);
+                    map.enemiesToSpawn[0][1]--;
+                    if(map.enemiesToSpawn[0][1] <= 0){
+                        map.enemiesToSpawn = map.enemiesToSpawn.splice(1);
+                    }
+                }else if(time%50 == 0){
+                    map.enemiesToSpawn[0][1]--;
+                    if(map.enemiesToSpawn[0][1] <= 0){
+                        map.enemiesToSpawn = map.enemiesToSpawn.splice(1);
+                    }
+                }
+            }else{
+                if(map.endlessMode){
+                    map.addEnemiesForEndlessMode();
                 }
             }
         }else{
