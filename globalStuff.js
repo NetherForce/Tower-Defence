@@ -29,3 +29,13 @@ var audioVolume = {
     "sfx": 1,
     "music": 1,
 }
+
+var reachedLevel = 1;
+
+var everythingLoaded = setInterval(function() {
+    if (/loaded|complete/.test(document.readyState)) {
+        clearInterval(everythingLoaded);
+
+        console.log("everything has loaded");
+    }
+  }, 10);

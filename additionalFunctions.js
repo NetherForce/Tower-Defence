@@ -56,6 +56,7 @@ function vectorFromAngle(angle){
 }
 
 function returnOnlyNumbersFromString(string){
+    // if(typeof string != "string") return null;
     let res = string.replace(/\D/g, "");
     return JSON.parse(res);
 }

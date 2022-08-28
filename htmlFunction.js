@@ -137,14 +137,44 @@ function levelChooseAddButton(level){
     document.getElementById("levelChoose").querySelector("#levelChooseButonHolder").appendChild(clonedDiv);
 }
 
+function levelChooseLockButton(level, isLocked){
+    //lock or unlock button
+    try{
+        let elementId = "levelChooseButton_" + level;
+        let theElement = document.getElementById("levelChoose").querySelector("#levelChooseButonHolder").querySelector("#" + elementId);
+        if(isLocked){
+            theElement.querySelector(".lockedImage").style.display = "flex";
+            theElement.disabled = true;
+        }else{
+            theElement.querySelector(".lockedImage").style.display = "none";
+            theElement.disabled = false;
+        }
+    }catch(error){
+        console.error("levelChooseLockButton function", error);
+    }
+}
+
+function levelChooseLockAllButtons(levelReached){
+    //lock or unlock untill a certain button
+    let theButtons = document.getElementById("levelChoose").querySelector("#levelChooseButonHolder").querySelectorAll("button");
+    for(let key in theButtons){
+        let aButton = theButtons[key];
+        if(aButton.id == undefined) continue;
+        let buttonLevel = returnOnlyNumbersFromString(aButton.id);
+
+        levelChooseLockButton(buttonLevel, (buttonLevel>levelReached));
+    }
+}
+
 function addAllLevelButtons(){
     for(let key in levelButtonsInfo){
         levelChooseAddButton(key);
     }
+    levelChooseLockAllButtons(reachedLevel);
 }
 
 function onLevelButtonClick(level){
-    level = returnOnlyNumbersFromString(level)-1;
+    level = returnOnlyNumbersFromString(level);
     
     let aMap = new Map(gridSizeX, gridSizeY);
     if(levelButtonsInfo[level] != undefined && levelButtonsInfo[level].map != undefined){
@@ -154,7 +184,7 @@ function onLevelButtonClick(level){
     }
     map.currLevel = level;
 
-    setClassStyleOnMapLoad(levelButtonsInfo[level+1].buttonStyle);
+    setClassStyleOnMapLoad(levelButtonsInfo[level].buttonStyle);
 
     switchMenus("gameMenu", "flex");
 }
@@ -211,10 +241,12 @@ function hidePauseMenuSettings(){
 
 function onVolumeChange(groupName, newVolume){
     audioVolume[groupName] = newVolume/100;
-    if(groupName = "sfx" && map.tankMoveAudio != undefined){
-        map.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
+    if(groupName = "sfx"){
+        if(map.tankMoveAudio != undefined) map.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
+        setSLSFXVolume(audioVolume['sfx']);
+    }else{
+        setLSMusicVolume(audioVolume['music']);
     }
-    //save in local storage
 
     // setAudioGroupVolume(groupName, newVolume/100);
 }
@@ -233,6 +265,7 @@ function startEndlessMode(){
     let aMap = new Map(gridSizeX, gridSizeY);
     setMap(aMap, 0);
     map.endlessMode = true;
+    map.currLevel = -1;
     map.enemiesToSpawn = [];
     map.addEnemiesForEndlessMode();
 
@@ -279,5 +312,5 @@ function restartLevel(){
     time = 0;
     currEnemy = null;
     currTurrType = 0;
-    onLevelButtonClick("asdf" + (currLevel+1));
+    onLevelButtonClick("asdf" + (currLevel));
 }

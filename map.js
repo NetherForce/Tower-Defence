@@ -180,7 +180,11 @@ class Map{
             showGameEndMenu(false);
         }
         if(isObjectEmpty(this.enemies) && this.enemiesToSpawn.length == 0){
-            console.log("GAME WON!!!");
+            if(this.currLevel+1 > reachedLevel){
+                reachedLevel = this.currLevel+1;
+                setSLReachedLevel(reachedLevel);
+                levelChooseLockAllButtons(reachedLevel);
+            }
             showGameEndMenu(true);
         }
     }

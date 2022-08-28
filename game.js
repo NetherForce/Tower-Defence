@@ -25,8 +25,8 @@ function setMap(aMap, mapToCopy){
                 map[key] = JSON.parse(JSON.stringify(maps[mapToCopy][key]));
             }
         }else{
-            for(let key in maps[0]){
-                map[key] = JSON.parse(JSON.stringify(maps[0][key]));
+            for(let key in maps[1]){
+                map[key] = JSON.parse(JSON.stringify(maps[1][key]));
             }
         }
         map.pathTileIndex = map.tiles[map.startIndexX][map.startIndexY].type;

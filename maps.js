@@ -1,5 +1,5 @@
 var maps = {
-    0: {
+    1: {
         "sizeX": 20,
         "sizeY": 20,
         "enemiesToSpawn": [[-1, 5], [0, 10], [5, 5]],
@@ -4894,7 +4894,7 @@ var maps = {
         "endIndexX": 2,
         "endIndexY": 19,
     },
-    1: {
+    2: {
         "sizeX": 20,
         "sizeY": 20,
         "enemiesToSpawn": [
@@ -9796,7 +9796,7 @@ var maps = {
         "endIndexX": 19,
         "endIndexY": 18,
     },
-    2: {
+    3: {
         "sizeX": 20,
         "sizeY": 20,
         "enemiesToSpawn": [
