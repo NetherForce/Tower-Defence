@@ -19,6 +19,7 @@ function switchMenus(menuId, newDisplay){
     document.getElementById("gameMenu").style.display = "none";
         document.getElementById("pauseMenuHolder").style.display="none";
         document.getElementById("pauseMenuSettings").style.display="none";
+        document.getElementById("gameEndMenu").style.display="none";
 
     document.getElementById(menuId).style.display = newDisplay;
 }
@@ -151,6 +152,7 @@ function onLevelButtonClick(level){
     }else{
         setMap(aMap, 0);
     }
+    map.currLevel = level;
 
     setClassStyleOnMapLoad(levelButtonsInfo[level+1].buttonStyle);
 
@@ -237,4 +239,45 @@ function startEndlessMode(){
     setClassStyleOnMapLoad(levelButtonsInfo[1].buttonStyle);
 
     switchMenus("gameMenu", "flex");
+}
+
+function showGameEndMenu(isGameWon){
+    let gameEndMenuElement = document.getElementById("gameMenu").querySelector("#gameEndMenu");
+    gameEndMenuElement.style.display = "flex";
+    gameEndMenuElement.style.opacity = 0;
+
+    let increaseOpacityFunction = () => {
+        let timeToCall = 100;
+
+        gameEndMenuElement.style.opacity = JSON.parse(gameEndMenuElement.style.opacity) + 0.1;
+
+        if (gameEndMenuElement.style.opacity >= 1) {
+            //loading done
+        } else {
+            setTimeout(increaseOpacityFunction, timeToCall);
+        }
+    };
+
+    if(isGameWon){
+        //do stuff when game is won
+        gameEndMenuElement.querySelector("#gameEndMenuEndText").innerText = "Game Won!";
+
+        //do other game won stuff (unlock next level and stuff)
+    }else{
+        //do stuff when game is lost
+        gameEndMenuElement.querySelector("#gameEndMenuEndText").innerText = "Game Lost!";
+    }
+
+    increaseOpacityFunction();
+}
+
+function restartLevel(){
+    let currLevel = map.currLevel;
+    map = null;
+    gameStoped = false;
+    gameStarted = false;
+    time = 0;
+    currEnemy = null;
+    currTurrType = 0;
+    onLevelButtonClick("asdf" + (currLevel+1));
 }

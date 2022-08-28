@@ -39,6 +39,8 @@ class Map{
 
         this.endlessMode = false;
         this.endlessModeProgression = 0;
+
+        this.currLevel;
     }
     fillWithDefaultTiles(defaultTileID){
         this.tiles = [];
@@ -134,11 +136,11 @@ class Map{
         this.path = this.calculateNextPathIndex(this.startIndexX, this.startIndexY, -1, -1);
 
         //calculate starting enemy angle
-        let pX1 = this.path.indexX * tileSize;
-        let pY1 = this.path.indexY * tileSize;
-        let pX2 = this.path.next.indexX * tileSize;
-        let pY2 = this.path.next.indexY * tileSize;
-        this.startingEnemyAngle = Math.atan2(pY1 - pY2, pX1 - pX2);
+        let pX1 = this.path.indexX;// * tileSize;
+        let pY1 = this.path.indexY;// * tileSize;
+        let pX2 = this.path.next.indexX;// * tileSize;
+        let pY2 = this.path.next.indexY;// * tileSize;
+        this.startingEnemyAngle = Math.atan2(pY2 - pY1, pX2 - pX1);
     }
     addEnemy(type, enemy=null){
         if(enemy != null){
@@ -175,9 +177,11 @@ class Map{
 
         if(this.globalHealth <= 0){
             console.log("GAME LOST!!!");
+            showGameEndMenu(false);
         }
         if(isObjectEmpty(this.enemies) && this.enemiesToSpawn.length == 0){
             console.log("GAME WON!!!");
+            showGameEndMenu(true);
         }
     }
     placeTurret(indexX, indexY, type){
