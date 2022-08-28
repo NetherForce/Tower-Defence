@@ -241,7 +241,7 @@ function hidePauseMenuSettings(){
 
 function onVolumeChange(groupName, newVolume){
     audioVolume[groupName] = newVolume/100;
-    if(groupName = "sfx"){
+    if(groupName == "sfx"){
         if(map.tankMoveAudio != undefined) map.tankMoveAudio.volume = map.numberOfTanks/10 * audioVolume["sfx"];
         setSLSFXVolume(audioVolume['sfx']);
     }else{
@@ -250,6 +250,12 @@ function onVolumeChange(groupName, newVolume){
 
     // setAudioGroupVolume(groupName, newVolume/100);
 }
+
+function setAudioVolumeSliderValue(musicVolume, sfxVolume){
+    document.getElementById("musicVolumeSlider").querySelector("input").value = musicVolume*100;
+    document.getElementById("sfxVolumeSlider").querySelector("input").value = sfxVolume*100;
+}
+setAudioVolumeSliderValue(audioVolume['music'], audioVolume['sfx']);
 
 function fromGameToMainMenu(){
     map = null;
