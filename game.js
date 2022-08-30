@@ -7,6 +7,17 @@ let currEnemy;
 let currTurrType = 0;
 let gameStoped = false;
 let gameStarted = false;
+let gameEnded = false;
+
+function setDefaultGameSettings(){
+    map = null;
+    gameStoped = false;
+    gameStarted = false;
+    gameEnded = false;
+    time = 0;
+    currEnemy = null;
+    currTurrType = 0;
+}
 
 window.addEventListener("load", function() {
     addAllLevelButtons();
@@ -36,6 +47,9 @@ function setMap(aMap, mapToCopy){
     }
     map.drawBackgroundTiles();
     map.calculatePath();
+
+    updateHealthStat(map.globalHealth);
+    updateCoinStat(map.coins);
 
     map.tankMoveAudio = audioElement["Small_Tracks_Rattle_Slow"];
     map.tankMoveAudio.loop = true;

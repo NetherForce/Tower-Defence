@@ -72,3 +72,16 @@ function isElement(element) {
 function isObjectEmpty(obj){
     return (Object.keys(obj).length === 0);
 }
+
+function createArray(sizeX, sizeY, value){
+    let array = [];
+
+    for(let i = 0; i < sizeX; i++){
+        array[i] = [];
+        for(let j = 0; j < sizeY; j++){
+            array[i][j] = value;
+        }
+    }
+
+    return array;
+}

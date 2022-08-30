@@ -1,5 +1,6 @@
 function onEditToolButtonClick(type){
     let tileType = returnOnlyNumbersFromString(type);
+    console.log("New Tile Type: " + tileType);
     currEditIndex = tileType;
 }
 
@@ -56,6 +57,31 @@ let levelButtonsInfo = {
         map: 5,
         buttonStyle: "sandGrass"
     },
+    6: {
+        level: 6,
+        map: 6,
+        buttonStyle: "dirtSand"
+    },
+    7: {
+        level: 7,
+        map: 7,
+        buttonStyle: "grassStone"
+    },
+    8: {
+        level: 8,
+        map: 8,
+        buttonStyle: "sandDirt"
+    },
+    9: {
+        level: 9,
+        map: 9,
+        buttonStyle: "stoneSand"
+    },
+    10: {
+        level: 10,
+        map: 10,
+        buttonStyle: "sandStone"
+    },
 }
 
 let classNamePairs = {
@@ -100,6 +126,8 @@ function setClassStyleOnMapLoad(className){
     removeAndSetClassOnElement(null, "canvas-id", className);
 
     removeAndSetClassOnElement(null, "pauseMenu", className);
+    
+    removeAndSetClassOnElement(null, "gameEndMenuButtonHolders", className);
 
     let pauseMenuButtons = document.getElementById("pauseMenuButtonHolder").querySelectorAll("button");
     for(let index in pauseMenuButtons){
@@ -111,6 +139,13 @@ function setClassStyleOnMapLoad(className){
     let pauseMenuSettingsButtons = document.getElementById("pauseMenuSettings").querySelectorAll("button");
     for(let index in pauseMenuSettingsButtons){
         let theButton = pauseMenuSettingsButtons[index];
+
+        if(isElement(theButton)) removeAndSetClassOnElement(theButton, "", secondaryClassName);
+    }
+
+    let endGameMenu = document.getElementById("gameEndMenu").querySelectorAll("button");
+    for(let index in endGameMenu){
+        let theButton = endGameMenu[index];
 
         if(isElement(theButton)) removeAndSetClassOnElement(theButton, "", secondaryClassName);
     }
@@ -144,9 +179,11 @@ function levelChooseLockButton(level, isLocked){
         let theElement = document.getElementById("levelChoose").querySelector("#levelChooseButonHolder").querySelector("#" + elementId);
         if(isLocked){
             theElement.querySelector(".lockedImage").style.display = "flex";
+            theElement.querySelector(".buttonPointer").style.display = "none";
             theElement.disabled = true;
         }else{
             theElement.querySelector(".lockedImage").style.display = "none";
+            theElement.querySelector(".buttonPointer").style.display = "block";
             theElement.disabled = false;
         }
     }catch(error){
@@ -176,6 +213,7 @@ function addAllLevelButtons(){
 function onLevelButtonClick(level){
     level = returnOnlyNumbersFromString(level);
     
+    console.log(gridSizeX, gridSizeY);
     let aMap = new Map(gridSizeX, gridSizeY);
     if(levelButtonsInfo[level] != undefined && levelButtonsInfo[level].map != undefined){
         setMap(aMap, levelButtonsInfo[level].map);
@@ -258,18 +296,13 @@ function setAudioVolumeSliderValue(musicVolume, sfxVolume){
 setAudioVolumeSliderValue(audioVolume['music'], audioVolume['sfx']);
 
 function fromGameToMainMenu(){
-    map = null;
-    gameStoped = false;
-    gameStarted = false;
-    time = 0;
-    currEnemy = null;
-    currTurrType = 0;
+    setDefaultGameSettings();
     switchMenus("levelChoose", "flex");
 }
 
 function startEndlessMode(){
     let aMap = new Map(gridSizeX, gridSizeY);
-    setMap(aMap, 0);
+    setMap(aMap, 1);
     map.endlessMode = true;
     map.currLevel = -1;
     map.enemiesToSpawn = [];
@@ -311,12 +344,11 @@ function showGameEndMenu(isGameWon){
 }
 
 function restartLevel(){
-    let currLevel = map.currLevel;
-    map = null;
-    gameStoped = false;
-    gameStarted = false;
-    time = 0;
-    currEnemy = null;
-    currTurrType = 0;
-    onLevelButtonClick("asdf" + (currLevel));
+    console.log(map.currLevel);
+    if(map.currLevel != -1){
+        onLevelButtonClick("asdf" + (map.currLevel));
+    }else{
+        setDefaultGameSettings();
+        startEndlessMode();
+    }
 }

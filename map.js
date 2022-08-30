@@ -133,6 +133,7 @@ class Map{
         return path;
     }
     calculatePath(){
+        if(this.startIndexX == undefined || this.startIndexY == undefined) return;
         this.path = this.calculateNextPathIndex(this.startIndexX, this.startIndexY, -1, -1);
 
         //calculate starting enemy angle
@@ -175,11 +176,13 @@ class Map{
         }
         delete this.enemies[enemyId];
 
-        if(this.globalHealth <= 0){
+        if(this.globalHealth <= 0 && !gameEnded){
+            gameEnded = true;
             console.log("GAME LOST!!!");
             showGameEndMenu(false);
         }
-        if(isObjectEmpty(this.enemies) && this.enemiesToSpawn.length == 0){
+        if(isObjectEmpty(this.enemies) && this.enemiesToSpawn.length == 0 && !gameEnded && !this.endlessMode){
+            gameEnded = true;
             if(this.currLevel+1 > reachedLevel){
                 reachedLevel = this.currLevel+1;
                 setSLReachedLevel(reachedLevel);
@@ -259,5 +262,189 @@ class Map{
         this.enemiesToSpawn.push([-1, 5]);
         this.enemiesToSpawn.push([enemyType, enemyNumber]);
         this.endlessModeProgression++;
+    }
+    fillMapWithOneTypeOfTile(tileType){
+        for(let i = 0; i < this.sizeX; i++){
+            for(let j = 0; j < this.sizeY; j++){
+                this.tiles[i][j].type = tileType;
+                this.overlapTiles[i][j].type = -1;
+            }
+        }
+    }
+    generateRandomPath(floorTiles, pathTiles){
+        let pathArray = createArray(this.sizeX, this.sizeY, 0);
+        //0 - empty place
+        //1 - path
+        //-1 - place where there cannot be placed a path
+
+        //mark corners as no-path places
+        pathArray[0][0] = -1;
+        pathArray[this.sizeX-1][0] = -1;
+        pathArray[0][this.sizeY-1] = -1;
+        pathArray[this.sizeX-1][this.sizeY-1] = -1;
+
+        let randomSide = Math.floor(Math.random() * 4); //0-top, 1-right, 2-bottom, 3-left
+        let randomPosition = Math.floor(Math.random() * ((randomSide == 0 || randomSide == 2) ? this.sizeX-2 : this.sizeY-2))+1;
+
+        let startingPositionX;
+        let startingPositionY;
+
+        let nextPositionX;
+        let nextPositionY;
+
+        if(randomSide == 0){
+            startingPositionX = randomPosition;
+            startingPositionY = 0;
+            nextPositionX = randomPosition;
+            nextPositionY = 1;
+
+            if(randomPosition-1 >= 0 && randomPosition-1 <= this.sizeX-1) pathArray[randomPosition-1][0] = -1;
+            if(randomPosition+1 >= 0 && randomPosition+1 <= this.sizeX-1) pathArray[randomPosition+1][0] = -1;
+            if(randomPosition-2 >= 0 && randomPosition-2 <= this.sizeX-1) pathArray[randomPosition-2][0] = -1;
+            if(randomPosition+2 >= 0 && randomPosition+2 <= this.sizeX-1) pathArray[randomPosition+2][0] = -1;
+        }
+        
+        if(randomSide == 1){
+            startingPositionX = this.sizeX-1;
+            startingPositionY = randomPosition;
+            nextPositionX = this.sizeX-2;
+            nextPositionY = randomPosition;
+
+            if(randomPosition-1 >= 0 && randomPosition-1 <= this.sizeY-1) pathArray[this.sizeX-1][randomPosition-1] = -1;
+            if(randomPosition+1 >= 0 && randomPosition+1 <= this.sizeY-1) pathArray[this.sizeX-1][randomPosition+1] = -1;
+            if(randomPosition-2 >= 0 && randomPosition-2 <= this.sizeY-1) pathArray[this.sizeX-1][randomPosition-2] = -1;
+            if(randomPosition+2 >= 0 && randomPosition+2 <= this.sizeY-1) pathArray[this.sizeX-1][randomPosition+2] = -1;
+        }
+        
+        if(randomSide == 2){
+            startingPositionX = randomPosition;
+            startingPositionY = this.sizeY-1;
+            nextPositionX = randomPosition;
+            nextPositionY = this.sizeY-2;
+
+            if(randomPosition-1 >= 0 && randomPosition-1 <= this.sizeX-1) pathArray[randomPosition-1][this.sizeY-1] = -1;
+            if(randomPosition+1 >= 0 && randomPosition+1 <= this.sizeX-1) pathArray[randomPosition+1][this.sizeY-1] = -1;
+            if(randomPosition-2 >= 0 && randomPosition-2 <= this.sizeX-1) pathArray[randomPosition-2][this.sizeY-1] = -1;
+            if(randomPosition+2 >= 0 && randomPosition+2 <= this.sizeX-1) pathArray[randomPosition+2][this.sizeY-1] = -1;
+        }
+        
+        if(randomSide == 3){
+            startingPositionX = 0;
+            startingPositionY = randomPosition;
+            nextPositionX = 1;
+            nextPositionY = randomPosition;
+
+            if(randomPosition-1 >= 0 && randomPosition-1 <= this.sizeY-1) pathArray[0][randomPosition-1] = -1;
+            if(randomPosition+1 >= 0 && randomPosition+1 <= this.sizeY-1) pathArray[0][randomPosition+1] = -1;
+            if(randomPosition-2 >= 0 && randomPosition-2 <= this.sizeY-1) pathArray[0][randomPosition-2] = -1;
+            if(randomPosition+2 >= 0 && randomPosition+2 <= this.sizeY-1) pathArray[0][randomPosition+2] = -1;
+        }
+        pathArray[startingPositionX][startingPositionY] = 1;
+
+        let generateNextPath = (pastX, pastY, floorTiles_, pathTiles_, hasJustStarted) => {
+            pathArray[pastX][pastY] = 1;
+            let possibleNextPositions = [];
+
+            if((pastX == 0 || pastX == this.sizeX-1 || pastY == 0 || pastY == this.sizeY-1) && !hasJustStarted){
+                //end generation
+                console.log("generating ended");
+                return;
+            }
+
+            if(pastX != 0 && pathArray[pastX-1][pastY] == 0){
+                possibleNextPositions.push({
+                    x: pastX-1,
+                    y: pastY,
+                });
+            }
+            if(pastX != this.sizeX-1 && pathArray[pastX+1][pastY] == 0){
+                possibleNextPositions.push({
+                    x: pastX+1,
+                    y: pastY,
+                });
+            }
+            if(pastY != 0 && pathArray[pastX][pastY-1] == 0){
+                possibleNextPositions.push({
+                    x: pastX,
+                    y: pastY-1,
+                });
+            }
+            if(pastY != this.sizeY-1 && pathArray[pastX][pastY+1] == 0){
+                possibleNextPositions.push({
+                    x: pastX,
+                    y: pastY+1,
+                });
+            }
+
+            if(possibleNextPositions.length == 0){
+                //restart generation
+                this.generatPlainMapWithPath(floorTiles_, pathTiles_);
+            }
+
+            let nextPositionIndex = Math.floor(Math.random() * possibleNextPositions.length);
+
+            for(let index in possibleNextPositions){
+                if(index == nextPositionIndex){
+                    pathArray[possibleNextPositions[index].x][possibleNextPositions[index].y] = 1;
+                }else{
+                    pathArray[possibleNextPositions[index].x][possibleNextPositions[index].y] = -1;
+                    let differenceX = possibleNextPositions[index].x - pastX;
+                    let differenceY = possibleNextPositions[index].y - pastY;
+                    if(possibleNextPositions[index].x != 0 && possibleNextPositions[index].x != this.sizeX-1 && possibleNextPositions[index].y != 0 && possibleNextPositions[index].y != this.sizeY-1){
+                        pathArray[(possibleNextPositions[index].x + differenceX)][(possibleNextPositions[index].y + differenceY)] = -1;
+                    }
+                }
+            }
+
+            for(let i = pastX-1; i < pastX+2; i++){
+                for(let j = pastY-1; j < pastY+2; j++){
+                    if(pathArray[i] == undefined || pathArray[i][j] == undefined) continue;
+                    if(possibleNextPositions[nextPositionIndex] != undefined){
+                        if(i == possibleNextPositions[nextPositionIndex].x || j == possibleNextPositions[nextPositionIndex].y) continue;
+                    }
+                    if(pathArray[i][j] == 0){
+                        pathArray[i][j] = -1;
+                        let differenceX = i - pastX;
+                        let differenceY = j - pastY;
+                        if(i != 0 && i != this.sizeX-1 && j != 0 && j != this.sizeY-1){
+                            pathArray[(i + differenceX)][(j + differenceY)] = -1;
+                        }
+                    }
+                }
+            }
+
+            if(possibleNextPositions[nextPositionIndex] != undefined){
+                generateNextPath(possibleNextPositions[nextPositionIndex].x, possibleNextPositions[nextPositionIndex].y, floorTiles, pathTiles, false);
+            }
+        }
+        generateNextPath(nextPositionX, nextPositionY, floorTiles, pathTiles, true);
+
+
+        let pathLength = 0;
+
+        //fill map with the tiles
+        for(let i = 0; i < this.sizeX; i++){
+            for(let j = 0; j < this.sizeY; j++){
+                if(pathArray[i][j] == 1){
+                    map.tiles[i][j].type = pathTiles;
+                    pathLength++;
+                }
+            }
+        }
+
+        return pathLength;
+
+        // return {
+        //     pathLength: pathLength,
+        //     pathArray: pathArray,
+        // };
+    }
+
+    generatPlainMapWithPath(floorTiles, pathTiles){
+        this.fillMapWithOneTypeOfTile(floorTiles);
+        if(this.generateRandomPath(floorTiles, pathTiles) < 35){
+            this.generatPlainMapWithPath(floorTiles, pathTiles);
+        }
+        this.drawBackgroundTiles();
     }
 }
