@@ -2,6 +2,8 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+
+        <title>Tower Defence</title>
     </head>
     <body onload="init()">
 
@@ -10,6 +12,30 @@
                 <button id="ChooseLevel" class="sandStone" onclick="onChooseLevelClick()">Choose level
                     <div class="buttonPointer"></div>
                 </button>
+                <button id="mainMenuHowToPlay" class="sandStone" onclick="showHotWoPlayMenu()">How To Play
+                    <div class="buttonPointer"></div>
+                </button>
+                <button id="mainMenuSettings" class="sandStone" onclick="showPauseMenuSettings()">Settings
+                    <div class="buttonPointer"></div>
+                </button>
+            </div>
+
+            <div id="mainMenuSettingsHolder" style="display: none;">
+                <div id="mainMenuPauseMenuSettings" class="grassDirt">
+                    <!-- two inputs -->
+
+                    <div id="mainMenuMusicVolumeHolder" class="sliderHolder">
+                        <div id="mainMenuMusicVolumeText" class="sliderText">Music volume:</div>
+                        <div id="mainMenuMusicVolumeSlider" class="sliderSlider"><input type="range" min="0" max="100" value="100" class="slider" onchange='onVolumeChange("music", this.value)'></div>
+                    </div>
+                    
+                    <div id="mainMenuSfxVolumeHolder" class="sliderHolder">
+                        <div id="mainMenuSfxVolumeText" class="sliderText">SFX volume:</div>
+                        <div id="mainMenuSfxVolumeSlider" class="sliderSlider"><input type="range" min="0" max="100" value="100" class="slider" onchange='onVolumeChange("sfx", this.value)'></div>
+                    </div>
+
+                    <button class="sandStone" onclick="hidePauseMenuSettings()">Back</button>
+                </div>
             </div>
         </div>
 
@@ -76,7 +102,7 @@
                 <div id="pauseMenu" class="grassDirt">
                     <div id="pauseMenuButtonHolder">
                         <button class="sandStone" onclick="showPauseMenuSettings()">Settings</button>
-                        <button class="sandStone" onclick="">How To Play</button>
+                        <button class="sandStone" onclick="showHotWoPlayMenu()">How To Play</button>
                         <button class="sandStone" onclick="fromGameToMainMenu()">To Main Menu</button>
                         <button class="sandStone" onclick="hidePauseMenu()">Resume</button>
                     </div>
@@ -104,6 +130,82 @@
                     <p id="gameEndMenuEndText">End text!</p>
                     <button class="sandStone" onclick="restartLevel()">Restart</button>
                     <button class="sandStone" onclick="fromGameToMainMenu()">To Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="howToPlayMenu" style="display: none;">
+            <ul id="howToPlayMenuNavBar" class="grassDirt">
+                <div>Enemies
+                    <a class="active" href="#howToPlayEnemies"></a>
+                </div>
+                <div>Turrets
+                    <a href="#howToPlayTurrets"></a>
+                </div>
+                <div>End Game
+                    <a href="#howToPlayEndGame"></a>
+                </div>
+                <div>Progress
+                    <a href="#howToPlayProgress"></a>
+                </div>
+
+                <div onclick="hideHotWoPlayMenu()">Back
+                </div>
+            </ul>
+
+            <div id="howToPlayContentHolder">
+                <div id="howToPlayEnemies" class="howToPlayContentWrapper">
+                    <!-- image and some text -->
+                    <div class="left">
+
+                    </div>
+                    <div class="right">
+                        <p>
+                            All enemies follow the path. Every enemy has health and gives coind upon death. If not killed, 
+                            every enemy deals a certain amount of damage when it reaches the end. The main two types of enemies are soldiers and tanks. 
+                            Soldiers are faster, but esier to kill. They give less coins and take away less health. 
+                            Tanks on the other hand are slower, harder to kill, but give more coins and take 
+                            more health away.
+                        </p>
+                    </div>
+                </div>
+    
+                <div id="howToPlayTurrets" class="howToPlayContentWrapper">
+                    <!-- image and some text -->
+                    <div class="left">
+                        <p>
+                            Turrets are used to fight the enmies. Every turret has a cost (you cannot place a turret unless you have enough coins). 
+                            Turrets re placed upon clicking on the field. A turred can only be placed on an empty place (you cannot place a turret 
+                            on the path, that the enemies are moving on or over bushes or rocks). When you hover over the place, that you want to 
+                            place the turret on, an indicator will show wheather you can actually place the turret (a red indicator will show that you 
+                            don't have enough coins or that you cannot place a turret over the place that you are hovering and a lightgrey indicator will 
+                            show that you can place a turret). Turrets have different fire rates and different bullets that deal more or less damage. Turrets 
+                            that fire bullets will only target soldiers and turrets that fire rockets will only target tanks.
+                        </p>
+                    </div>
+                    <div class="right">
+
+                    </div>
+                </div>
+    
+                <div id="howToPlayEndGame" class="howToPlayContentWrapper">
+                    <!-- image and some text -->
+                    <div class="left">
+
+                    </div>
+                    <div class="right">
+
+                    </div>
+                </div>
+    
+                <div id="howToPlayProgress" class="howToPlayContentWrapper">
+                    <!-- image and some text -->
+                    <div class="left">
+
+                    </div>
+                    <div class="right">
+
+                    </div>
                 </div>
             </div>
         </div>

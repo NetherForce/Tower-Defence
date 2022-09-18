@@ -1,3 +1,11 @@
+function showHotWoPlayMenu(){
+    document.getElementById("howToPlayMenu").style.display = "flex";
+}
+
+function hideHotWoPlayMenu(){
+    document.getElementById("howToPlayMenu").style.display = "none";
+}
+
 function onEditToolButtonClick(type){
     let tileType = returnOnlyNumbersFromString(type);
     console.log("New Tile Type: " + tileType);
@@ -270,11 +278,19 @@ function hidePauseMenu(){
 function showPauseMenuSettings(){
     document.getElementById("pauseMenuButtonHolder").style.display="none";
     document.getElementById("pauseMenuSettings").style.display="inline-block";
+
+    //main menu pause menu
+    document.getElementById("mainMenu").querySelector("#buttonHolder").style.display="none";
+    document.getElementById("mainMenuSettingsHolder").style.display="inline-block";
 }
 
 function hidePauseMenuSettings(){
     document.getElementById("pauseMenuButtonHolder").style.display="inline-block";
     document.getElementById("pauseMenuSettings").style.display="none";
+
+    //main menu pause menu
+    document.getElementById("mainMenu").querySelector("#buttonHolder").style.display="flex";
+    document.getElementById("mainMenuSettingsHolder").style.display="none";
 }
 
 function onVolumeChange(groupName, newVolume){
@@ -286,12 +302,16 @@ function onVolumeChange(groupName, newVolume){
         setLSMusicVolume(audioVolume['music']);
     }
 
-    // setAudioGroupVolume(groupName, newVolume/100);
+    setAudioVolumeSliderValue(audioVolume["music"], audioVolume["sfx"]);
 }
 
 function setAudioVolumeSliderValue(musicVolume, sfxVolume){
     document.getElementById("musicVolumeSlider").querySelector("input").value = musicVolume*100;
     document.getElementById("sfxVolumeSlider").querySelector("input").value = sfxVolume*100;
+
+    //main menu settings sliders
+    document.getElementById("mainMenuMusicVolumeSlider").querySelector("input").value = musicVolume*100;
+    document.getElementById("mainMenuSfxVolumeSlider").querySelector("input").value = sfxVolume*100;
 }
 setAudioVolumeSliderValue(audioVolume['music'], audioVolume['sfx']);
 
