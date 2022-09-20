@@ -86,16 +86,17 @@ function update() {
         if(!currEnemy){
             if(map.enemiesToSpawn[0] != undefined){
                 if(map.enemiesToSpawn[0][0] != -1){
+                    console.log(JSON.stringify(map.enemiesToSpawn[0]));
                     currEnemy = new Enemy(map.enemies.length, map.path);
                     currEnemy.setByType(map.enemiesToSpawn[0][0]);
                     map.enemiesToSpawn[0][1]--;
                     if(map.enemiesToSpawn[0][1] <= 0){
-                        map.enemiesToSpawn = map.enemiesToSpawn.splice(1);
+                        map.enemiesToSpawn.splice(0, 1);
                     }
                 }else if(time%50 == 0){
                     map.enemiesToSpawn[0][1]--;
                     if(map.enemiesToSpawn[0][1] <= 0){
-                        map.enemiesToSpawn = map.enemiesToSpawn.splice(1);
+                        map.enemiesToSpawn.splice(0, 1);
                     }
                 }
             }else{
@@ -107,14 +108,14 @@ function update() {
             if(time%currEnemy.timeToSpawn == 0){
                 map.addEnemy(-1, currEnemy);
                 currEnemy = undefined;
-                if(map.enemiesToSpawn[0] != undefined){
-                    currEnemy = new Enemy(map.enemies.length, map.path);
-                    currEnemy.setByType(map.enemiesToSpawn[0][0]);
-                    map.enemiesToSpawn[0][1]--;
-                    if(map.enemiesToSpawn[0][1] <= 0){
-                        map.enemiesToSpawn.splice(0, 1);
-                    }
-                }
+                // if(map.enemiesToSpawn[0] != undefined){
+                //     currEnemy = new Enemy(map.enemies.length, map.path);
+                //     currEnemy.setByType(map.enemiesToSpawn[0][0]);
+                //     map.enemiesToSpawn[0][1]--;
+                //     if(map.enemiesToSpawn[0][1] <= 0){
+                //         map.enemiesToSpawn.splice(0, 1);
+                //     }
+                // }
             }
         }
     }

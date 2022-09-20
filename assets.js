@@ -71,6 +71,10 @@ function loadTiles(canvasId, tilesheet, originalSize, numCellsX, numCellsY, shee
     }else{
         newSize = theSize;
         tileSize = newSize;
+        cellStride = tileSize+distBetweenCanvasTiles;
+
+        theCanvas.width = sheetLenghtX*cellStride;
+        theCanvas.height = sheetLenghtY*cellStride;        
     }
 
     theContext.clearRect(0, 0, theCanvas.width, theCanvas.height);

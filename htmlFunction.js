@@ -221,7 +221,6 @@ function addAllLevelButtons(){
 function onLevelButtonClick(level){
     level = returnOnlyNumbersFromString(level);
     
-    console.log(gridSizeX, gridSizeY);
     let aMap = new Map(gridSizeX, gridSizeY);
     if(levelButtonsInfo[level] != undefined && levelButtonsInfo[level].map != undefined){
         setMap(aMap, levelButtonsInfo[level].map);
@@ -366,7 +365,9 @@ function showGameEndMenu(isGameWon){
 function restartLevel(){
     console.log(map.currLevel);
     if(map.currLevel != -1){
-        onLevelButtonClick("asdf" + (map.currLevel));
+        let currLevel = map.currLevel;
+        setDefaultGameSettings();
+        onLevelButtonClick("asdf" + (currLevel));
     }else{
         setDefaultGameSettings();
         startEndlessMode();

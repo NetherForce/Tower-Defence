@@ -291,6 +291,9 @@ button{
     font-size: xx-large;
     font-weight: bolder;
     color: black;   
+
+    
+    text-shadow: 0.01rem 0.01rem #ffffff;
 }
 
 #howToPlayMenu .left{

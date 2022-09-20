@@ -248,6 +248,11 @@ class Map{
             this.enemies[i].centerX = this.enemies[i].centerX/oldSize * newSize;
             this.enemies[i].centerY = this.enemies[i].centerY/oldSize * newSize;
         }
+        
+        for(let i in this.turrets){
+            this.turrets[i].centerX = this.turrets[i].centerX/oldSize * newSize;
+            this.turrets[i].centerY = this.turrets[i].centerY/oldSize * newSize;
+        }
     }
     addEnemiesForEndlessMode(){
         let enemyType = this.endlessModeProgression%6;

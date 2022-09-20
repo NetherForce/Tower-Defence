@@ -54,7 +54,7 @@ let enemyTypes = {
         imageIndex: 268,
         secondImageIndex: 291,
         timeToSpawn: 50,
-        speed: 0.025,
+        speed: 0.015,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
         rewardedCoins: 50,
@@ -66,7 +66,7 @@ let enemyTypes = {
         imageIndex: 269,
         secondImageIndex: 292,
         timeToSpawn: 50,
-        speed: 0.03,
+        speed: 0.02,
         secondImaeOffsetX: 0,
         secondImaeOffsetY: 0,
         rewardedCoins: 100,
@@ -124,8 +124,11 @@ class Enemy{
         updatableContext.fillStyle = "green";
         updatableContext.strokeStyle = "black";
 
-        updatableContext.fillRect(this.centerX - 20/2, this.centerY - 25, this.health*20/this.maxHealth, 5);
-        updatableContext.strokeRect(this.centerX - 20/2, this.centerY - 25, 20, 5);
+        let hpBarX = tileSize * 0.8;
+        let hpBarY = tileSize/5;
+
+        updatableContext.fillRect(this.centerX - hpBarX/2, this.centerY - (hpBarY*3.8), this.health*hpBarX/this.maxHealth, hpBarY);
+        updatableContext.strokeRect(this.centerX - hpBarX/2, this.centerY - (hpBarY*3.8), hpBarX, hpBarY);
 
         updatableContext.globalAlpha = 1;
     }
